@@ -1563,7 +1563,7 @@ button {
 [data-theme="dark"] .info-card-premium,
 [data-theme="dark"] .music-toggle,
 [data-theme="dark"] .map-info-box {
-    background: #1e1e1e;
+    background: #161d1a;
     border: 1px solid #333;
     color: #f0f0f0;
 }
@@ -1597,7 +1597,7 @@ button {
 }
 
 [data-theme="dark"] .nav-menu {
-    background: #121212;
+    background: #0f1412;
 }
 
 [data-theme="dark"] .nav-link {

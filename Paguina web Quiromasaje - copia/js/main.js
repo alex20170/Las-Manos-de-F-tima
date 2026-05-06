@@ -1,4 +1,4 @@
-// ========================================
+﻿// ========================================
 // ARCHIVO: js/main.js
 // NAVEGACIÃ“N Y CONFIGURACIÃ“N MULTI-PÃGINA
 // ========================================
@@ -461,7 +461,7 @@ if (themeToggle) {
 
 function updateThemeIcon(theme) {
     if (themeIcon) {
-        themeIcon.textContent = theme === 'dark' ? 'â˜€ï¸' : 'ðŸŒ™';
+        themeIcon.textContent = theme === 'dark' ? 'â˜€ï¸' : '🌙';
     }
 }
 
