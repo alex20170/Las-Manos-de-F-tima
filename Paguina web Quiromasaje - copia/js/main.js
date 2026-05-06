@@ -335,7 +335,7 @@ if (bookingForm) {
         }
     }
 
-    bookingForm.addEventListener('submit', function(e) {
+    bookingForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         const submitBtn = this.querySelector('button[type="submit"]');
@@ -347,41 +347,41 @@ if (bookingForm) {
         const fecha = document.getElementById('fecha').value;
         const hora = document.getElementById('hora').value;
         
-        // CONFIGURACIÓN SUPABASE (Final)
+        const mensaje = `🌿 *NUEVA RESERVA - Las Manos de Fátima*\n\n👤 *Cliente:* ${nombre}\n💆 *Servicio:* ${servicio}\n📅 *Fecha:* ${fecha}\n🕐 *Hora:* ${hora}\n\n_Enviado desde la web_`;
+        const urlWhatsApp = `https://wa.me/34637805557?text=${encodeURIComponent(mensaje)}`;
+
+        // CONFIGURACIÓN SUPABASE
         const SUPABASE_URL = 'https://hnldgzockufiknivvfaa.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhubGRnem9ja3VmaWtuaXZ2ZmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNzkzMjIsImV4cCI6MjA5MzY1NTMyMn0.s8X1YX9qfeJXLD6PUVJkKoobgnpf_5A098JZQE7Feqk';
         const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
-        // GUARDAR EN SUPABASE (Si está configurado)
+        // GUARDAR EN SUPABASE (Esperar a que termine)
         if (supabase) {
-            supabase.from('citas').insert([{
-                nombre, servicio, fecha, hora, estado: 'Pendiente'
-            }]).then(() => console.log('Cita guardada en la nube'));
+            try {
+                await supabase.from('citas').insert([{
+                    nombre, servicio, fecha, hora, estado: 'Pendiente'
+                }]);
+                console.log('Cita guardada en Supabase');
+            } catch (err) {
+                console.error('Error guardando en la nube:', err);
+            }
         }
 
-        // GUARDAR EN "BASE DE DATOS" LOCAL (Como respaldo)
+        // GUARDAR EN LOCAL (Respaldo)
         const nuevaCita = {
             id: Date.now(),
-            nombre,
-            servicio,
-            fecha,
-            hora,
-            estado: 'Pendiente',
+            nombre, servicio, fecha, hora, estado: 'Pendiente',
             timestamp: new Date().toISOString()
         };
-        
-        const citas = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
-        citas.unshift(nuevaCita);
-        localStorage.setItem('citas_manos_fatima', JSON.stringify(citas));
+        const citasLocal = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
+        citasLocal.unshift(nuevaCita);
+        localStorage.setItem('citas_manos_fatima', JSON.stringify(citasLocal));
 
-        const mensaje = `🌿 *NUEVA RESERVA - Las Manos de Fátima*\n\n👤 *Cliente:* ${nombre}\n💆 *Servicio:* ${servicio}\n📅 *Fecha:* ${fecha}\n🕐 *Hora:* ${hora}\n\n_Enviado desde la web_`;
-        const urlWhatsApp = `https://wa.me/34637805557?text=${encodeURIComponent(mensaje)}`;
-
-        // Simular un pequeño delay y redirigir
+        // Redirigir
         setTimeout(() => {
             window.open(urlWhatsApp, '_blank');
             window.location.href = 'gracias.html';
-        }, 800);
+        }, 300);
     });
 }
 
