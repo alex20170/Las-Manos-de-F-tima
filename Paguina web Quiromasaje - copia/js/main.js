@@ -374,6 +374,9 @@ if (bookingForm) {
         citas.unshift(nuevaCita);
         localStorage.setItem('citas_manos_fatima', JSON.stringify(citas));
 
+        const mensaje = `🌿 *NUEVA RESERVA - Las Manos de Fátima*\n\n👤 *Cliente:* ${nombre}\n💆 *Servicio:* ${servicio}\n📅 *Fecha:* ${fecha}\n🕐 *Hora:* ${hora}\n\n_Enviado desde la web_`;
+        const urlWhatsApp = `https://wa.me/34637805557?text=${encodeURIComponent(mensaje)}`;
+
         // Simular un pequeño delay y redirigir
         setTimeout(() => {
             window.open(urlWhatsApp, '_blank');
