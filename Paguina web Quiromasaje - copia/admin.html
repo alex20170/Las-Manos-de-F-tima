@@ -9,61 +9,30 @@
     <style>
         /* ===== LOGIN SCREEN ===== */
         #loginScreen {
-            position: fixed;
-            inset: 0;
+            position: fixed; inset: 0;
             background: linear-gradient(135deg, #2c3e3a 0%, #4a6741 50%, #7d9d7f 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            padding: 20px;
+            display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 20px;
         }
         .login-card {
-            background: rgba(255,255,255,0.12);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.25);
-            border-radius: 28px;
-            padding: 50px 40px;
-            width: 100%;
-            max-width: 420px;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
-            text-align: center;
+            background: rgba(255,255,255,0.12); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.25); border-radius: 28px; padding: 50px 40px;
+            width: 100%; max-width: 420px; box-shadow: 0 30px 80px rgba(0,0,0,0.3); text-align: center;
             animation: slideUp 0.5s cubic-bezier(0.16,1,0.3,1);
         }
-        @keyframes slideUp {
-            from { opacity:0; transform: translateY(30px); }
-            to   { opacity:1; transform: translateY(0); }
-        }
+        @keyframes slideUp { from { opacity:0; transform: translateY(30px); } to { opacity:1; transform: translateY(0); } }
         .login-logo { font-size: 3rem; margin-bottom: 10px; }
         .login-card h2 { color: white; font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 5px; }
         .login-card p { color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-bottom: 30px; }
         .login-field { margin-bottom: 16px; text-align: left; }
-        .login-field label { display: block; color: rgba(255,255,255,0.85); font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; letter-spacing: 0.5px; }
+        .login-field label { display: block; color: rgba(255,255,255,0.85); font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; }
         .login-field input {
-            width: 100%;
-            padding: 14px 18px;
-            background: rgba(255,255,255,0.15);
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 14px;
-            color: white;
-            font-size: 1rem;
-            font-family: 'Poppins', sans-serif;
-            outline: none;
-            transition: all 0.3s ease;
+            width: 100%; padding: 14px 18px; background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3); border-radius: 14px; color: white;
+            font-size: 1rem; outline: none; transition: all 0.3s ease;
         }
         .login-btn {
-            width: 100%;
-            padding: 16px;
-            background: white;
-            color: #2c3e3a;
-            border: none;
-            border-radius: 14px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.3s ease;
+            width: 100%; padding: 16px; background: white; color: #2c3e3a; border: none;
+            border-radius: 14px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 10px;
         }
         .login-error { color: #ffcdd2; font-size: 0.85rem; margin-top: 12px; display: none; background: rgba(244,67,54,0.2); padding: 10px; border-radius: 10px; }
 
@@ -72,24 +41,26 @@
         .admin-container { padding: 40px 20px; max-width: 1100px; margin: 80px auto; }
         .admin-card { background: var(--color-bg-light); border-radius: 20px; padding: 30px; box-shadow: var(--shadow-medium); }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid var(--color-primary-light); padding-bottom: 15px; flex-wrap: wrap; gap: 10px; }
-        .admin-actions { display: flex; gap: 10px; }
+        .stats-bar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+        .stat-chip { background: white; border: 2px solid var(--color-primary-light); border-radius: 12px; padding: 10px 18px; font-size: 0.85rem; font-weight: 600; color: var(--color-primary-dark); }
         .appointments-table { width: 100%; border-collapse: collapse; margin-top: 20px; overflow-x: auto; display: block; }
-        .appointments-table th { background: var(--color-primary); color: white; padding: 14px 15px; text-align: left; font-weight: 600; }
+        .appointments-table th { background: var(--color-primary); color: white; padding: 14px 15px; text-align: left; }
         .appointments-table td { padding: 14px 15px; border-bottom: 1px solid rgba(0,0,0,0.06); font-size: 0.9rem; }
-        .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+        .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; white-space: nowrap; }
         .status-pendiente { background: #fff3e0; color: #ef6c00; }
         .status-completada { background: #e8f5e9; color: #2e7d32; }
-        .btn-delete { background: #ffebee; color: #c62828; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
-        .btn-complete { background: #e8f5e9; color: #2e7d32; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; margin-right: 5px; }
-        .stat-chip { background: white; border: 2px solid var(--color-primary-light); border-radius: 12px; padding: 10px 20px; font-size: 0.85rem; font-weight: 600; margin-right: 10px; }
+        .btn-delete { background: #ffebee; color: #c62828; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .btn-delete:hover { background: #c62828; color: white; }
+        .btn-complete { background: #e8f5e9; color: #2e7d32; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; margin-right: 5px; transition: 0.2s; }
+        .btn-complete:hover { background: #2e7d32; color: white; }
         .source-tag { font-size: 0.7rem; color: #999; }
         [data-theme="dark"] .admin-card { background: #1e1e1e; border: 1px solid #333; }
         [data-theme="dark"] td { color: #f0f0f0; }
+        [data-theme="dark"] .stat-chip { background: #2a2a2a; }
     </style>
 </head>
 <body>
 
-    <!-- ===== PANTALLA DE LOGIN ===== -->
     <div id="loginScreen">
         <div class="login-card">
             <div class="login-logo">🌿</div>
@@ -98,27 +69,26 @@
             <form id="loginForm" onsubmit="checkLogin(event)">
                 <div class="login-field">
                     <label>👤 Usuario</label>
-                    <input type="text" id="loginUser" required>
+                    <input type="text" id="loginUser" placeholder="Introduce tu usuario" required>
                 </div>
                 <div class="login-field">
                     <label>🔒 Contraseña</label>
-                    <input type="password" id="loginPass" required>
+                    <input type="password" id="loginPass" placeholder="Introduce tu contraseña" required>
                 </div>
                 <button type="submit" class="login-btn">Entrar al Panel →</button>
-                <div id="loginError" class="login-error">❌ Credenciales incorrectas</div>
+                <div id="loginError" class="login-error">❌ Usuario o contraseña incorrectos</div>
             </form>
         </div>
     </div>
 
-    <!-- ===== PANEL DE ADMIN ===== -->
     <div id="adminPanel">
         <header id="header">
             <nav class="navbar">
                 <div class="container">
                     <a href="index.html" class="logo"><div class="logo-text"><h1>Panel Admin</h1></div></a>
-                    <div style="display:flex; gap: 15px;">
+                    <div style="display:flex; gap: 15px; align-items: center;">
                         <a href="index.html" class="nav-link">🌐 Web</a>
-                        <button onclick="cerrarSesion()" class="nav-link" style="background:none;border:none;cursor:pointer;color:#c62828;">🚪 Salir</button>
+                        <button onclick="cerrarSesion()" class="nav-link" style="background:none;border:none;cursor:pointer;color:#c62828;font-weight:600;">🚪 Salir</button>
                     </div>
                 </div>
             </nav>
@@ -129,11 +99,11 @@
                 <div class="admin-header">
                     <div>
                         <h2>📋 Gestión de Citas</h2>
-                        <div id="statsBar" style="margin-top:12px; display:flex;"></div>
+                        <div class="stats-bar" id="statsBar" style="margin-top:12px;"></div>
                     </div>
-                    <div class="admin-actions">
-                        <button onclick="renderCitas()" class="btn btn-primary">🔄</button>
-                        <button onclick="exportarCitas()" class="btn btn-primary" style="background:#2e7d32;">📥</button>
+                    <div style="display:flex; gap:10px;">
+                        <button onclick="renderCitas()" class="btn btn-primary" style="padding: 8px 15px; font-size: 0.85rem;">🔄 Actualizar</button>
+                        <button onclick="exportarCitas()" class="btn btn-primary" style="padding: 8px 15px; font-size: 0.85rem; background: #2e7d32;">📥 Exportar</button>
                     </div>
                 </div>
                 <div id="appointmentsList"></div>
@@ -157,13 +127,11 @@
                 renderCitas();
             } else {
                 document.getElementById('loginError').style.display = 'block';
+                setTimeout(() => document.getElementById('loginError').style.display = 'none', 3000);
             }
         }
 
-        function cerrarSesion() {
-            sessionStorage.removeItem('admin_auth');
-            location.reload();
-        }
+        function cerrarSesion() { sessionStorage.removeItem('admin_auth'); location.reload(); }
 
         if (sessionStorage.getItem('admin_auth') === 'true') {
             document.getElementById('loginScreen').style.display = 'none';
@@ -173,36 +141,47 @@
 
         async function renderCitas() {
             const listContainer = document.getElementById('appointmentsList');
-            listContainer.innerHTML = '<p>Cargando...</p>';
+            listContainer.innerHTML = '<p style="text-align:center; padding:40px;">⏳ Cargando citas...</p>';
             let cloud = [];
             let local = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
 
             if (_supabase) {
-                const { data } = await _supabase.from('citas').select('*');
-                if (data) cloud = data.map(c => ({ ...c, _source: 'cloud' }));
+                try {
+                    const { data } = await _supabase.from('citas').select('*');
+                    if (data) cloud = data.map(c => ({ ...c, _source: 'cloud' }));
+                } catch (e) { console.error('Error Supabase:', e); }
             }
 
             const total = [...cloud, ...local.map(c => ({ ...c, _source: 'local' }))];
             
-            document.getElementById('statsBar').innerHTML = `<span class="stat-chip">Total: ${total.length}</span>`;
+            // STATS
+            const pendientes = total.filter(c => c.estado === 'Pendiente').length;
+            const completadas = total.filter(c => c.estado === 'Completada').length;
+            document.getElementById('statsBar').innerHTML = `
+                <span class="stat-chip">📌 Total: ${total.length}</span>
+                <span class="stat-chip" style="border-color:#ef6c00;color:#ef6c00;">⏳ Pendientes: ${pendientes}</span>
+                <span class="stat-chip" style="border-color:#2e7d32;color:#2e7d32;">✅ Completadas: ${completadas}</span>
+                ${cloud.length > 0 ? '<span class="stat-chip" style="border-color:#1565c0;color:#1565c0;">☁️ Nube: ' + cloud.length + '</span>' : ''}
+            `;
 
             if (total.length === 0) {
-                listContainer.innerHTML = '<p>No hay citas.</p>';
+                listContainer.innerHTML = '<div style="text-align:center; padding:40px;">📭 No hay citas registradas.</div>';
                 return;
             }
 
-            let html = '<table class="appointments-table"><thead><tr><th>Cliente</th><th>Servicio</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>';
+            let html = '<table class="appointments-table"><thead><tr><th>Cliente</th><th>Servicio</th><th>Fecha / Hora</th><th>Estado</th><th>Origen</th><th>Acciones</th></tr></thead><tbody>';
             total.forEach(cita => {
                 const pk = Object.keys(cita)[0];
-                const id = cita[pk];
+                const id = JSON.stringify(cita[pk]);
                 html += `<tr>
-                    <td>${cita.nombre}</td>
-                    <td>${cita.servicio}</td>
-                    <td>${cita.fecha} ${cita.hora}</td>
-                    <td><span class="status-badge status-${cita.estado.toLowerCase()}">${cita.estado}</span></td>
+                    <td><strong>${cita.nombre || 'N/A'}</strong></td>
+                    <td>${cita.servicio ? cita.servicio.split('-')[0].trim() : 'N/A'}</td>
+                    <td>${cita.fecha || ''} &nbsp; ${cita.hora || ''}</td>
+                    <td><span class="status-badge status-${(cita.estado || 'pendiente').toLowerCase()}">${cita.estado || 'Pendiente'}</span></td>
+                    <td><span class="source-tag">${cita._source === 'cloud' ? '☁️ Nube' : '💾 Local'}</span></td>
                     <td>
-                        <button onclick="cambiarEstado('${id}', 'Completada', '${cita._source}')" class="btn-complete">✓</button>
-                        <button onclick="borrarCita('${id}', '${cita._source}')" class="btn-delete">🗑️</button>
+                        ${(cita.estado === 'Pendiente') ? `<button onclick="cambiarEstado(${id}, 'Completada', '${cita._source}')" class="btn-complete">✓</button>` : ''}
+                        <button onclick="borrarCita(${id}, '${cita._source}')" class="btn-delete">🗑️</button>
                     </td>
                 </tr>`;
             });
@@ -216,32 +195,32 @@
                 await _supabase.from('citas').update({ estado }).eq(pk, id);
             } else {
                 let items = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
-                items = items.map(c => c.id == id ? { ...c, estado } : c);
+                items = items.map(c => (c.id == id || c.created_at == id) ? { ...c, estado } : c);
                 localStorage.setItem('citas_manos_fatima', JSON.stringify(items));
             }
             renderCitas();
         }
 
         async function borrarCita(id, source) {
-            if (!confirm('¿Borrar?')) return;
+            if (!confirm('¿Seguro que quieres borrar esta cita?')) return;
             if (source === 'cloud' && _supabase) {
                 const { data } = await _supabase.from('citas').select('*').limit(1);
                 const pk = data ? Object.keys(data[0])[0] : 'id';
                 await _supabase.from('citas').delete().eq(pk, id);
             } else {
                 let items = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
-                items = items.filter(c => c.id != id);
+                items = items.filter(c => (c.id != id && c.created_at != id));
                 localStorage.setItem('citas_manos_fatima', JSON.stringify(items));
             }
             renderCitas();
         }
 
         function exportarCitas() {
-            const data = localStorage.getItem('citas_manos_fatima');
+            const data = localStorage.getItem('citas_manos_fatima') || '[]';
             const blob = new Blob([data], { type: 'application/json' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = 'citas.json';
+            a.download = 'citas_locales.json';
             a.click();
         }
     </script>
