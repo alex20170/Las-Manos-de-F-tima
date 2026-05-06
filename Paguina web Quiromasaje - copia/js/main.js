@@ -461,7 +461,7 @@ if (themeToggle) {
 
 function updateThemeIcon(theme) {
     if (themeIcon) {
-        themeIcon.textContent = theme === 'dark' ? 'â˜€ï¸' : '🌙';
+        themeIcon.textContent = theme === 'dark' ? '\u2600\uFE0F' : '\uD83C\uDF19';
     }
 }
 
