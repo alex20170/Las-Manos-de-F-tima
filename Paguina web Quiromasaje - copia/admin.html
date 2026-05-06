@@ -79,7 +79,7 @@
     <script>
         const S_URL = 'https://hnldgzockufiknivvfaa.supabase.co';
         const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhubGRnem9ja3VmaWtuaXZ2ZmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNzkzMjIsImV4cCI6MjA5MzY1NTMyMn0.s8X1YX9qfeJXLD6PUVJkKoobgnpf_5A098JZQE7Feqk';
-        let sup; let allCitas = []; let filterStatus = 'Todos';
+        let sup; let allCitas = []; let filterStatus = 'Todos'; let currentVisible = [];
 
         function initSup() { if (window.supabase) { sup = window.supabase.createClient(S_URL, S_KEY); } else { setTimeout(initSup, 100); } }
         initSup();
@@ -98,9 +98,8 @@
             if(sup) {
                 try {
                     const { data } = await sup.from('citas').select('*');
-                    if(data && data.length > 0) {
+                    if(data) {
                         cloud = data.map(c => {
-                            // Detectamos qué columna es el ID real en cada fila
                             const pk = Object.keys(c).find(k => k.toLowerCase() === 'id' || k === 'created_at');
                             return {...c, _src: 'cloud', _id: c[pk], _pk: pk};
                         });
@@ -118,43 +117,45 @@
             if(filterStatus !== 'Todos') filtered = filtered.filter(c => c.estado === filterStatus);
             if(dateVal) filtered = filtered.filter(c => c.fecha === dateVal);
             filtered.sort((a,b) => (b.fecha+b.hora).localeCompare(a.fecha+a.hora));
+            currentVisible = filtered; // Guardamos lo que se ve para usar el índice
+
             const p = allCitas.filter(c => c.estado === 'Pendiente').length;
             const c = allCitas.filter(c => c.estado === 'Completada').length;
             document.getElementById('statsBar').innerHTML = `<span class="stat-chip">Total: ${allCitas.length}</span><span class="stat-chip" style="color:orange;">Pendientes: ${p}</span><span class="stat-chip" style="color:green;">Completas: ${c}</span>`;
+            
             if(filtered.length === 0) { list.innerHTML = '<p style="text-align:center; padding:40px;">No hay citas.</p>'; return; }
             let h = '<table class="appointments-table"><thead><tr><th>Cliente</th><th>Servicio</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>';
-            filtered.forEach(item => {
-                const idVal = JSON.stringify(item._id);
-                const pkName = JSON.stringify(item._pk);
+            filtered.forEach((item, index) => {
                 h += `<tr><td><strong>${item.nombre}</strong></td><td>${item.servicio}</td><td>${item.fecha} ${item.hora}</td><td><span class="status-badge status-${item.estado.toLowerCase()}">${item.estado}</span></td><td>
-                    ${item.estado==='Pendiente'?`<button onclick="updateCita(${idVal},'Completada','${item._src}',${pkName})" class="btn-action btn-complete">✓</button>`:''}
-                    <button onclick="deleteCita(${idVal},'${item._src}',${pkName})" class="btn-action btn-delete">🗑️</button>
+                    ${item.estado==='Pendiente'?`<button onclick="updateByIndex(${index},'Completada')" class="btn-action btn-complete">✓</button>`:''}
+                    <button onclick="deleteByIndex(${index})" class="btn-action btn-delete">🗑️</button>
                 </td></tr>`;
             });
             list.innerHTML = h + '</tbody></table>';
         }
 
-        async function updateCita(id, st, src, pk) {
-            if(src==='cloud' && sup) {
-                // Forzamos que el ID sea el tipo correcto (número o texto)
-                const { error } = await sup.from('citas').update({ estado: st }).eq(pk, id);
-                if(error) alert('Error Supabase: ' + error.message);
+        async function updateByIndex(index, st) {
+            const item = currentVisible[index];
+            if(item._src==='cloud' && sup) {
+                const { error } = await sup.from('citas').update({ estado: st }).eq(item._pk, item._id);
+                if(error) alert('Error: ' + error.message);
             } else {
                 let items = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
-                items = items.map(c => (c._id == id || c.id == id || c.nombre == id) ? {...c, estado: st} : c);
+                items = items.map(c => (c.id == item._id || c.created_at == item._id || c.nombre == item._id) ? {...c, estado: st} : c);
                 localStorage.setItem('citas_manos_fatima', JSON.stringify(items));
             }
             renderCitas();
         }
 
-        async function deleteCita(id, src, pk) {
+        async function deleteByIndex(index) {
             if(!confirm('¿Eliminar?')) return;
-            if(src==='cloud' && sup) {
-                const { error } = await sup.from('citas').delete().eq(pk, id);
-                if(error) alert('Error Supabase: ' + error.message);
+            const item = currentVisible[index];
+            if(item._src==='cloud' && sup) {
+                const { error } = await sup.from('citas').delete().eq(item._pk, item._id);
+                if(error) alert('Error: ' + error.message);
             } else {
                 let items = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
-                items = items.filter(c => (c._id != id && c.id != id && c.nombre != id));
+                items = items.filter(c => (c.id != item._id && c.created_at != item._id && c.nombre != item._id));
                 localStorage.setItem('citas_manos_fatima', JSON.stringify(items));
             }
             renderCitas();
