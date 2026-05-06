@@ -1,6 +1,6 @@
-// ========================================
+﻿// ========================================
 // ARCHIVO: js/main.js
-// NAVEGACIÓN Y CONFIGURACIÓN MULTI-PÁGINA
+// NAVEGACIÃ“N Y CONFIGURACIÃ“N MULTI-PÃGINA
 // ========================================
 
 const header = document.getElementById('header');
@@ -8,7 +8,7 @@ const menuToggle = document.querySelector('.menu-toggle');
 const navMenu = document.querySelector('.nav-menu');
 const navLinks = document.querySelectorAll('.nav-link');
 
-// Activar link actual según URL
+// Activar link actual segÃºn URL
 const currentPath = window.location.pathname.split('/').pop() || 'index.html';
 navLinks.forEach(link => {
     if (link.getAttribute('href') === currentPath) {
@@ -29,7 +29,7 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Toggle menú mobile
+// Toggle menÃº mobile
 if (menuToggle) {
     menuToggle.addEventListener('click', () => {
         navMenu.classList.toggle('active');
@@ -49,10 +49,10 @@ async function fetchReviews() {
     if (!reviewsContainer) return;
 
     try {
-        // 1. Obtener reseñas locales de localStorage
+        // 1. Obtener reseÃ±as locales de localStorage
         let localReviews = JSON.parse(localStorage.getItem('userReviews')) || [];
         
-        // Migración: asegurar que todas tengan ID
+        // MigraciÃ³n: asegurar que todas tengan ID
         let updated = false;
         localReviews = localReviews.map(rev => {
             if (!rev.id) {
@@ -62,19 +62,19 @@ async function fetchReviews() {
             return rev;
         });
         if (updated) {
-            console.log('Migración de IDs completada para localReviews');
+            console.log('MigraciÃ³n de IDs completada para localReviews');
             localStorage.setItem('userReviews', JSON.stringify(localReviews));
         }
 
-        // 2. Obtener reseñas de la API para completar el grid
+        // 2. Obtener reseÃ±as de la API para completar el grid
         const response = await fetch('https://randomuser.me/api/?results=3&nat=es');
         const data = await response.json();
         const apiUsers = data.results;
 
         const apiReviews = [
-            "Excelente trato y profesionalidad. Salí como nuevo de la sesión de quiromasaje.",
-            "El Reiki me ayudó muchísimo con mi ansiedad. Fátima transmite una paz increíble.",
-            "Muy recomendado para deportistas. El masaje de descarga fue perfecto para mi recuperación."
+            "Excelente trato y profesionalidad. SalÃ­ como nuevo de la sesiÃ³n de quiromasaje.",
+            "El Reiki me ayudÃ³ muchÃ­simo con mi ansiedad. FÃ¡tima transmite una paz increÃ­ble.",
+            "Muy recomendado para deportistas. El masaje de descarga fue perfecto para mi recuperaciÃ³n."
         ];
 
         // Mezclamos locales (primero) y luego API
@@ -88,19 +88,19 @@ async function fetchReviews() {
 
         reviewsContainer.innerHTML = '';
         
-        // Mostrar hasta 20 reseñas en el grid
+        // Mostrar hasta 20 reseÃ±as en el grid
         let html = '';
         allReviews.slice(0, 20).forEach((review, index) => {
-            const stars = '⭐'.repeat(review.rating);
+            const stars = 'â­'.repeat(review.rating);
             html += `
                 <div class="review-card-premium fade-up" style="transition-delay: ${index * 0.1}s">
-                    ${review.id ? `<button class="delete-review" onclick="deleteReview('${review.id}', event)" title="Eliminar reseña">🗑️</button>` : ''}
+                    ${review.id ? `<button class="delete-review" onclick="deleteReview('${review.id}', event)" title="Eliminar reseÃ±a">ðŸ—‘ï¸</button>` : ''}
                     <div class="review-header">
                         <img src="${review.image || 'https://via.placeholder.com/60'}" alt="${review.name}" class="review-avatar-img">
                         <div class="review-meta">
                             <h4>${review.name}</h4>
                             <div class="review-stars">${stars}</div>
-                            <small class="review-location">📍 Enviado desde: ${review.location || 'España'}</small>
+                            <small class="review-location">ðŸ“ Enviado desde: ${review.location || 'EspaÃ±a'}</small>
                         </div>
                     </div>
                     <p class="review-text">"${review.text}"</p>
@@ -115,12 +115,12 @@ async function fetchReviews() {
         }, 100);
 
     } catch (error) {
-        console.error('Error cargando reseñas:', error);
+        console.error('Error cargando reseÃ±as:', error);
         reviewsContainer.innerHTML = '<p>Error al cargar testimonios.</p>';
     }
 }
 
-// LÓGICA DEL MODAL DE RESEÑAS
+// LÃ“GICA DEL MODAL DE RESEÃ‘AS
 const reviewModal = document.getElementById('reviewModal');
 const openReviewBtn = document.getElementById('openReviewBtn');
 const closeBtn = document.querySelector('.close-modal');
@@ -146,13 +146,13 @@ if (newReviewForm) {
         const rating = parseInt(document.getElementById('revRating').value);
         const text = document.getElementById('revText').value;
 
-        // Intentar obtener ubicación por IP
-        let location = "Jerez, España";
+        // Intentar obtener ubicaciÃ³n por IP
+        let location = "Jerez, EspaÃ±a";
         try {
             const locRes = await fetch('https://ipapi.co/json/');
             const locData = await locRes.json();
             if (locData.city) location = `${locData.city}, ${locData.country_name}`;
-        } catch (err) { console.log("No se pudo obtener ubicación"); }
+        } catch (err) { console.log("No se pudo obtener ubicaciÃ³n"); }
 
         const newReview = {
             id: 'rev-' + Date.now(),
@@ -165,13 +165,13 @@ if (newReviewForm) {
         };
 
         const localReviews = JSON.parse(localStorage.getItem('userReviews')) || [];
-        localReviews.unshift(newReview); // Añadir al principio
+        localReviews.unshift(newReview); // AÃ±adir al principio
         localStorage.setItem('userReviews', JSON.stringify(localReviews));
 
         reviewModal.style.display = "none";
         newReviewForm.reset();
         fetchReviews(); // Recargar el grid
-        alert("¡Gracias por tu reseña! Se ha publicado correctamente.");
+        alert("Â¡Gracias por tu reseÃ±a! Se ha publicado correctamente.");
     };
 }
 
@@ -188,24 +188,24 @@ async function fetchWellnessTip() {
         const response = await fetch('data/tips.json');
         const tips = await response.json();
         
-        // LÓGICA PARA QUE CAMBIE CADA DÍA (USANDO EL DÍA DEL AÑO)
+        // LÃ“GICA PARA QUE CAMBIE CADA DÃA (USANDO EL DÃA DEL AÃ‘O)
         const now = new Date();
         const start = new Date(now.getFullYear(), 0, 0);
         const diff = now - start;
         const oneDay = 1000 * 60 * 60 * 24;
         const dayOfYear = Math.floor(diff / oneDay);
         
-        // Seleccionamos el consejo basado en el día (ciclo de 30 días)
+        // Seleccionamos el consejo basado en el dÃ­a (ciclo de 30 dÃ­as)
         const dailyTip = tips[dayOfYear % tips.length].tip;
 
         tipContainer.innerHTML = `
             <div class="tip-box fade-up">
-                <span class="tip-icon">✨</span>
+                <span class="tip-icon">âœ¨</span>
                 <p class="tip-text"><strong>Consejo de Bienestar:</strong> ${dailyTip}</p>
             </div>
         `;
         
-        // Activar animación
+        // Activar animaciÃ³n
         setTimeout(() => {
             const box = tipContainer.querySelector('.tip-box');
             if (box) box.classList.add('visible');
@@ -222,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchWellnessTip();
 });
 
-// Función para seleccionar servicio desde la home y redirigir
+// FunciÃ³n para seleccionar servicio desde la home y redirigir
 function selectService(serviceKey) {
     if (serviceKey) {
         window.location.href = `reservar.html?servicio=${serviceKey}`;
@@ -231,14 +231,14 @@ function selectService(serviceKey) {
     }
 }
 
-// Función para eliminar reseña
+// FunciÃ³n para eliminar reseÃ±a
 function deleteReview(id, event) {
     if (event) {
         event.preventDefault();
         event.stopPropagation();
     }
     
-    if (confirm('¿Seguro que quieres borrar esta reseña?')) {
+    if (confirm('Â¿Seguro que quieres borrar esta reseÃ±a?')) {
         try {
             let localReviews = JSON.parse(localStorage.getItem('userReviews')) || [];
             const before = localReviews.length;
@@ -248,14 +248,14 @@ function deleteReview(id, event) {
             
             if (localReviews.length < before) {
                 localStorage.setItem('userReviews', JSON.stringify(localReviews));
-                console.log('Reseña eliminada. Recargando...');
+                console.log('ReseÃ±a eliminada. Recargando...');
                 fetchReviews();
             } else {
-                alert('No se pudo encontrar la reseña para borrar.');
+                alert('No se pudo encontrar la reseÃ±a para borrar.');
             }
         } catch (e) {
             console.error('Error al borrar:', e);
-            alert('Hubo un error al intentar borrar la reseña.');
+            alert('Hubo un error al intentar borrar la reseÃ±a.');
         }
     }
 }
@@ -307,7 +307,7 @@ if (slides.length > 0) {
 const bookingForm = document.getElementById('bookingForm');
 
 if (bookingForm) {
-    // Configurar fechas mínimas y máximas
+    // Configurar fechas mÃ­nimas y mÃ¡ximas
     const fechaInput = document.getElementById('fecha');
     const hoy = new Date();
     fechaInput.min = hoy.toISOString().split('T')[0];
@@ -319,17 +319,17 @@ if (bookingForm) {
 
     if (serviceParam && serviceSelect) {
         const serviceMap = {
-            'relax': 'Masaje Relajante - 60min - 35€',
-            'terapeutico': 'Masaje Terapéutico - 75min - 45€',
-            'deportivo': 'Masaje Deportivo - 60min - 40€',
-            'express': 'Masaje Express - 30min - 25€',
-            'reiki': 'Sesión de Reiki - 60min - 30€',
-            'combinado': 'Quiromasaje + Reiki - 90min - 55€'
+            'relax': 'Masaje Relajante - 60min - 35â‚¬',
+            'terapeutico': 'Masaje TerapÃ©utico - 75min - 45â‚¬',
+            'deportivo': 'Masaje Deportivo - 60min - 40â‚¬',
+            'express': 'Masaje Express - 30min - 25â‚¬',
+            'reiki': 'SesiÃ³n de Reiki - 60min - 30â‚¬',
+            'combinado': 'Quiromasaje + Reiki - 90min - 55â‚¬'
         };
         
         if (serviceMap[serviceParam]) {
             serviceSelect.value = serviceMap[serviceParam];
-            // Efecto visual de selección
+            // Efecto visual de selecciÃ³n
             serviceSelect.style.borderColor = 'var(--color-primary)';
             serviceSelect.style.backgroundColor = '#f0f7f0';
         }
@@ -347,10 +347,13 @@ if (bookingForm) {
         const fecha = document.getElementById('fecha').value;
         const hora = document.getElementById('hora').value;
         
-        const mensaje = `🌿 *NUEVA RESERVA - Las Manos de Fátima*\n\n👤 *Cliente:* ${nombre}\n💆 *Servicio:* ${servicio}\n📅 *Fecha:* ${fecha}\n🕐 *Hora:* ${hora}\n\n_Enviado desde la web_`;
+        const mensaje = `ðŸŒ¿ *NUEVA RESERVA - Las Manos de FÃ¡tima*\n\nðŸ‘¤ *Cliente:* ${nombre}\nðŸ’† *Servicio:* ${servicio}\nðŸ“… *Fecha:* ${fecha}\nðŸ• *Hora:* ${hora}\n\n_Enviado desde la web_`;
         const urlWhatsApp = `https://wa.me/34637805557?text=${encodeURIComponent(mensaje)}`;
 
-        // CONFIGURACIÓN SUPABASE
+        // ABRIR WHATSAPP INMEDIATAMENTE (antes del await para evitar bloqueo)
+        window.open(urlWhatsApp, '_blank');
+
+        // CONFIGURACIÃ“N SUPABASE
         const SUPABASE_URL = 'https://hnldgzockufiknivvfaa.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhubGRnem9ja3VmaWtuaXZ2ZmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNzkzMjIsImV4cCI6MjA5MzY1NTMyMn0.s8X1YX9qfeJXLD6PUVJkKoobgnpf_5A098JZQE7Feqk';
         const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
@@ -379,9 +382,8 @@ if (bookingForm) {
 
         // Redirigir
         setTimeout(() => {
-            window.open(urlWhatsApp, '_blank');
             window.location.href = 'gracias.html';
-        }, 300);
+        }, 400);
     });
 }
 
@@ -420,7 +422,7 @@ faqQuestions.forEach(question => {
     });
 });
 
-// Botón de música - Asegurar que funcione en todas las páginas
+// BotÃ³n de mÃºsica - Asegurar que funcione en todas las pÃ¡ginas
 const musicToggle = document.getElementById('musicToggle');
 if (musicToggle) {
     const bgMusic = document.getElementById('bgMusic');
@@ -459,12 +461,12 @@ if (themeToggle) {
 
 function updateThemeIcon(theme) {
     if (themeIcon) {
-        themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        themeIcon.textContent = theme === 'dark' ? 'â˜€ï¸' : 'ðŸŒ™';
     }
 }
 
 // ========================================
-// ACTUALIZACIÓN AUTOMÁTICA DE EDAD
+// ACTUALIZACIÃ“N AUTOMÃTICA DE EDAD
 // ========================================
 
 function updateFatimaAge() {
@@ -486,3 +488,4 @@ function updateFatimaAge() {
 
 // Ejecutar al cargar
 updateFatimaAge();
+
