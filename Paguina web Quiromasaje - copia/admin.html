@@ -55,14 +55,22 @@
 
         async function renderCitas() {
             const listContainer = document.getElementById('appointmentsList');
-            let citas = [];
+            let citasCloud = [];
+            let citasLocal = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
 
+            // 1. Intentar traer de la nube
             if (_supabase) {
-                const { data, error } = await _supabase.from('citas').select('*').order('id', { ascending: false });
-                if (!error) citas = data;
-            } else {
-                citas = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
+                try {
+                    const { data, error } = await _supabase.from('citas').select('*').order('id', { ascending: false });
+                    if (!error && data) citasCloud = data;
+                } catch (e) {
+                    console.error("Error leyendo de Supabase:", e);
+                }
             }
+
+            // 2. Combinar ambas (evitando duplicados por ID si fuera necesario, 
+            // pero aquí las locales suelen ser las que no subieron)
+            const citas = [...citasCloud, ...citasLocal];
 
             if (citas.length === 0) {
                 listContainer.innerHTML = '<div class="empty-state"><h3>No hay citas registradas todavía</h3><p>Las nuevas reservas aparecerán aquí automáticamente.</p></div>';
