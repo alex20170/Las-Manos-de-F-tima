@@ -45,8 +45,8 @@
             <div class="login-logo">🌿</div>
             <h2>Acceso Administración</h2>
             <form onsubmit="checkLogin(event)">
-                <div class="login-field"><label>Usuario</label><input type="text" id="loginUser" required></div>
-                <div class="login-field"><label>Contraseña</label><input type="password" id="loginPass" required></div>
+                <div class="login-field"><label>Usuario</label><input type="text" id="loginUser" value="admin" required></div>
+                <div class="login-field"><label>Contraseña</label><input type="password" id="loginPass" value="admin-1234" required></div>
                 <button type="submit" class="login-btn">Entrar</button>
                 <div id="loginError" class="login-error">❌ Datos incorrectos</div>
             </form>
@@ -77,31 +77,19 @@
     </div>
 
     <script>
-        const ADMIN_USER = 'admin'; const ADMIN_PASS = 'admin-1234';
         const S_URL = 'https://hnldgzockufiknivvfaa.supabase.co';
         const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhubGRnem9ja3VmaWtuaXZ2ZmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNzkzMjIsImV4cCI6MjA5MzY1NTMyMn0.s8X1YX9qfeJXLD6PUVJkKoobgnpf_5A098JZQE7Feqk';
-        let sup; let allCitas = []; let filterStatus = 'Todos'; let dbPK = 'id';
+        let sup; let allCitas = []; let filterStatus = 'Todos';
 
         function initSup() { if (window.supabase) { sup = window.supabase.createClient(S_URL, S_KEY); } else { setTimeout(initSup, 100); } }
         initSup();
 
-        function checkLogin(e) {
-            e.preventDefault();
-            if(document.getElementById('loginUser').value===ADMIN_USER && document.getElementById('loginPass').value===ADMIN_PASS) {
-                sessionStorage.setItem('auth', '1');
-                startPanel();
-            } else { document.getElementById('loginError').style.display = 'block'; }
-        }
+        function checkLogin(e) { e.preventDefault(); if(document.getElementById('loginUser').value==='admin' && document.getElementById('loginPass').value==='admin-1234') { sessionStorage.setItem('auth', '1'); startPanel(); } else { document.getElementById('loginError').style.display = 'block'; } }
         function cerrarSesion() { sessionStorage.clear(); location.reload(); }
         function startPanel() { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('adminPanel').style.display = 'block'; renderCitas(); }
         if(sessionStorage.getItem('auth')) startPanel();
 
-        function setFilterStatus(s) {
-            filterStatus = s;
-            ['fAll','fPend','fComp'].forEach(b => document.getElementById(b).classList.remove('active'));
-            document.getElementById(s==='Todos'?'fAll':s==='Pendiente'?'fPend':'fComp').classList.add('active');
-            aplicarFiltros();
-        }
+        function setFilterStatus(s) { filterStatus = s; ['fAll','fPend','fComp'].forEach(b => document.getElementById(b).classList.remove('active')); document.getElementById(s==='Todos'?'fAll':s==='Pendiente'?'fPend':'fComp').classList.add('active'); aplicarFiltros(); }
 
         async function renderCitas() {
             const list = document.getElementById('appointmentsList');
@@ -111,12 +99,15 @@
                 try {
                     const { data } = await sup.from('citas').select('*');
                     if(data && data.length > 0) {
-                        dbPK = Object.keys(data[0]).find(k => k==='id' || k==='ID' || k==='created_at') || 'id';
-                        cloud = data.map(c => ({...c, _src: 'cloud', _id: c[dbPK]}));
+                        cloud = data.map(c => {
+                            // Detectamos qué columna es el ID real en cada fila
+                            const pk = Object.keys(c).find(k => k.toLowerCase() === 'id' || k === 'created_at');
+                            return {...c, _src: 'cloud', _id: c[pk], _pk: pk};
+                        });
                     }
                 } catch (e) { console.error(e); }
             }
-            allCitas = [...cloud, ...local.map(c => ({...c, _src: 'local', _id: c.id || c.created_at || c.nombre}))];
+            allCitas = [...cloud, ...local.map(c => ({...c, _src: 'local', _id: c.id || c.created_at || c.nombre, _pk: 'id'}))];
             aplicarFiltros();
         }
 
@@ -133,30 +124,37 @@
             if(filtered.length === 0) { list.innerHTML = '<p style="text-align:center; padding:40px;">No hay citas.</p>'; return; }
             let h = '<table class="appointments-table"><thead><tr><th>Cliente</th><th>Servicio</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>';
             filtered.forEach(item => {
-                const idStr = JSON.stringify(item._id);
-                h += `<tr><td><strong>${item.nombre}</strong></td><td>${item.servicio}</td><td>${item.fecha} ${item.hora}</td><td><span class="status-badge status-${item.estado.toLowerCase()}">${item.estado}</span></td><td>${item.estado==='Pendiente'?`<button onclick="updateCita(${idStr},'Completada','${item._src}')" class="btn-action btn-complete">✓</button>`:''}<button onclick="deleteCita(${idStr},'${item._src}')" class="btn-action btn-delete">🗑️</button></td></tr>`;
+                const idVal = JSON.stringify(item._id);
+                const pkName = JSON.stringify(item._pk);
+                h += `<tr><td><strong>${item.nombre}</strong></td><td>${item.servicio}</td><td>${item.fecha} ${item.hora}</td><td><span class="status-badge status-${item.estado.toLowerCase()}">${item.estado}</span></td><td>
+                    ${item.estado==='Pendiente'?`<button onclick="updateCita(${idVal},'Completada','${item._src}',${pkName})" class="btn-action btn-complete">✓</button>`:''}
+                    <button onclick="deleteCita(${idVal},'${item._src}',${pkName})" class="btn-action btn-delete">🗑️</button>
+                </td></tr>`;
             });
             list.innerHTML = h + '</tbody></table>';
         }
 
-        async function updateCita(id, st, src) {
+        async function updateCita(id, st, src, pk) {
             if(src==='cloud' && sup) {
-                await sup.from('citas').update({ estado: st }).eq(dbPK, id);
+                // Forzamos que el ID sea el tipo correcto (número o texto)
+                const { error } = await sup.from('citas').update({ estado: st }).eq(pk, id);
+                if(error) alert('Error Supabase: ' + error.message);
             } else {
                 let items = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
-                items = items.map(c => (c.id == id || c.created_at == id || c.nombre == id) ? {...c, estado: st} : c);
+                items = items.map(c => (c._id == id || c.id == id || c.nombre == id) ? {...c, estado: st} : c);
                 localStorage.setItem('citas_manos_fatima', JSON.stringify(items));
             }
             renderCitas();
         }
 
-        async function deleteCita(id, src) {
+        async function deleteCita(id, src, pk) {
             if(!confirm('¿Eliminar?')) return;
             if(src==='cloud' && sup) {
-                await sup.from('citas').delete().eq(dbPK, id);
+                const { error } = await sup.from('citas').delete().eq(pk, id);
+                if(error) alert('Error Supabase: ' + error.message);
             } else {
                 let items = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
-                items = items.filter(c => (c.id != id && c.created_at != id && c.nombre != id));
+                items = items.filter(c => (c._id != id && c.id != id && c.nombre != id));
                 localStorage.setItem('citas_manos_fatima', JSON.stringify(items));
             }
             renderCitas();
