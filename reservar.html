@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservar Cita | Las Manos de Fátima</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+    <header id="header">
+        <nav class="navbar">
+            <div class="container">
+                <a href="index.html" class="logo">
+                    <svg class="logo-svg" width="60" height="60" viewBox="0 0 100 120"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <!-- Palma de la mano -->
+                        <rect x="35" y="45" width="30" height="40" rx="8" fill="#d4a574" />
+                        <!-- Dedo pulgar izquierdo -->
+                        <ellipse cx="28" cy="55" rx="8" ry="14" fill="#d4a574" transform="rotate(-20 28 55)" />
+                        <!-- Dedo índice -->
+                        <rect x="35" y="20" width="10" height="32" rx="5" fill="#d4a574" />
+                        <!-- Dedo corazón (más largo) -->
+                        <rect x="45" y="14" width="10" height="36" rx="5" fill="#d4a574" />
+                        <!-- Dedo anular -->
+                        <rect x="55" y="20" width="10" height="32" rx="5" fill="#d4a574" />
+                        <!-- Dedo meñique -->
+                        <ellipse cx="72" cy="55" rx="8" ry="14" fill="#d4a574" transform="rotate(20 72 55)" />
+                        <!-- Ojo en el centro -->
+                        <ellipse cx="50" cy="62" rx="7" ry="5" fill="white" />
+                        <circle cx="50" cy="62" r="3" fill="#2d6a6a" />
+                        <circle cx="51" cy="61" r="1" fill="white" />
+                    </svg>
+                    <div class="logo-text">
+                        <h1>Las Manos de Fátima</h1>
+                    </div>
+                </a>
+                <div class="theme-toggle-wrapper">
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Inicio</a></li>
+                    <li><a href="sobre-mi.html" class="nav-link">Sobre Mí</a></li>
+                    <li><a href="servicios.html" class="nav-link">Servicios</a></li>
+                    <li><a href="reservar.html" class="nav-link cta-link active">Reservar Cita</a></li>
+                    <li><a href="contacto.html" class="nav-link">Contacto</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <section class="page-header"
+        style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=1920') center/cover;">
+        <div class="container">
+            <h1>Reserva tu Cita</h1>
+            <p>Tu momento de paz comienza aquí</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="booking-container">
+                <form id="bookingForm" class="booking-form-premium">
+                    <div class="form-group">
+                        <label for="servicio">Selecciona el servicio *</label>
+                        <select id="servicio" name="servicio" required>
+                            <option value="">-- Elige un servicio --</option>
+                            <option value="Masaje Relajante - 60min - 35€">Masaje Relajante (60 min) - 35€</option>
+                            <option value="Masaje Terapéutico - 75min - 45€">Masaje Terapéutico (75 min) - 45€</option>
+                            <option value="Masaje Deportivo - 60min - 40€">Masaje Deportivo (60 min) - 40€</option>
+                            <option value="Masaje Express - 30min - 25€">Masaje Express (30 min) - 25€</option>
+                            <option value="Sesión de Reiki - 60min - 30€">Sesión de Reiki (60 min) - 30€</option>
+                            <option value="Quiromasaje + Reiki - 90min - 55€">Quiromasaje + Reiki (90 min) - 55€</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fecha">Fecha preferida *</label>
+                            <input type="date" id="fecha" name="fecha" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="hora">Hora *</label>
+                            <select id="hora" name="hora" required>
+                                <option value="">-- Selecciona --</option>
+                                <option value="09:00">09:00</option>
+                                <option value="10:30">10:30</option>
+                                <option value="12:00">12:00</option>
+                                <option value="16:00">16:00</option>
+                                <option value="17:30">17:30</option>
+                                <option value="19:00">19:00</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nombre">Nombre completo *</label>
+                        <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono">Teléfono *</label>
+                        <input type="tel" id="telefono" name="telefono" placeholder="123456789" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" placeholder="tu@email.com" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-large btn-full">
+                        <span class="btn-text">Confirmar y Enviar por WhatsApp</span>
+                    </button>
+                </form>
+
+                <div class="booking-info-premium">
+                    <div class="info-card-premium">
+                        <h3>💡 Información</h3>
+                        <ul>
+                            <li>Confirmación vía WhatsApp</li>
+                            <li>Llega 5 min antes</li>
+                            <li>Cancelación con 24h de antelación</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-premium">
+        <div class="container">
+            <p>&copy; 2026 Las Manos de Fátima.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

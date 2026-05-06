@@ -1,0 +1,6 @@
+# Requisitos del Sistema para Las Manos de Fátima
+
+- Docker >= 20.10
+- Docker Compose >= 1.29
+
+No se necesitan dependencias de software adicionales (Python, Node.js, etc.) ya que todo el entorno se autogestiona dentro del contenedor Docker.
