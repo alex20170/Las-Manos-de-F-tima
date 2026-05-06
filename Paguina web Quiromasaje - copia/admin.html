@@ -297,7 +297,7 @@
             `;
 
             citas.forEach((cita, idx) => {
-                const idStr = JSON.stringify(cita.id);
+                const pkName = Object.keys(cita)[0]; const idStr = JSON.stringify(cita[pkName] || cita.id);
                 html += `
                     <tr>
                         <td><strong>${cita.nombre || 'N/A'}</strong></td>
@@ -319,7 +319,7 @@
 
         async function cambiarEstado(id, nuevoEstado, source) {
             if (source === 'cloud' && _supabase) {
-                await _supabase.from('citas').update({ estado: nuevoEstado }).eq('id', id);
+                const { data: cols } = await _supabase.from('citas').select('*').limit(1); const pk = cols && cols[0] ? Object.keys(cols[0])[0] : 'id'; await _supabase.from('citas').update({ estado: nuevoEstado }).eq(pk, id);
             } else {
                 let citas = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
                 citas = citas.map(c => c.id == id ? { ...c, estado: nuevoEstado } : c);
@@ -331,7 +331,7 @@
         async function borrarCita(id, source) {
             if (!confirm('¿Seguro que quieres eliminar este registro?')) return;
             if (source === 'cloud' && _supabase) {
-                await _supabase.from('citas').delete().eq('id', id);
+                const { data: cols } = await _supabase.from('citas').select('*').limit(1); const pk = cols && cols[0] ? Object.keys(cols[0])[0] : 'id'; await _supabase.from('citas').delete().eq(pk, id);
             } else {
                 let citas = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
                 citas = citas.filter(c => c.id != id);
