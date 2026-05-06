@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -178,7 +178,7 @@
             aplicarFiltros();
         }
 
-        function limpiarFiltros() {
+        function limpiarFiltros() { document.getElementById('filterDate').value = ''; setFilterStatus('Todos'); renderCitas();
             document.getElementById('filterDate').value = '';
             setFilterStatus('Todos');
         }
