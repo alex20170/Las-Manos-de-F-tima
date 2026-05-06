@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -7,34 +7,18 @@
     <link rel="stylesheet" href="css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* ===== LOGIN SCREEN PREMIUM ===== */
-        #loginScreen {
-            position: fixed; inset: 0;
-            background: linear-gradient(135deg, #2c3e3a 0%, #4a6741 50%, #7d9d7f 100%);
-            display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 20px;
-        }
-        .login-card {
-            background: rgba(255,255,255,0.12); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.25); border-radius: 28px; padding: 50px 40px;
-            width: 100%; max-width: 420px; box-shadow: 0 30px 80px rgba(0,0,0,0.3); text-align: center;
-        }
+        /* CSS PREMIUM */
+        #loginScreen { position: fixed; inset: 0; background: linear-gradient(135deg, #2c3e3a 0%, #4a6741 50%, #7d9d7f 100%); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
+        .login-card { background: rgba(255,255,255,0.12); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.25); border-radius: 28px; padding: 50px 40px; width: 100%; max-width: 420px; box-shadow: 0 30px 80px rgba(0,0,0,0.3); text-align: center; }
         .login-logo { font-size: 3.5rem; margin-bottom: 10px; }
         .login-card h2 { color: white; font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 5px; }
         .login-card p { color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-bottom: 30px; }
         .login-field { margin-bottom: 16px; text-align: left; }
         .login-field label { display: block; color: rgba(255,255,255,0.85); font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; }
-        .login-field input {
-            width: 100%; padding: 14px 18px; background: rgba(255,255,255,0.15);
-            border: 1px solid rgba(255,255,255,0.3); border-radius: 14px; color: white; outline: none; transition: 0.3s;
-        }
-        .login-btn {
-            width: 100%; padding: 16px; background: white; color: #2c3e3a; border: none;
-            border-radius: 14px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s;
-        }
-        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .login-field input { width: 100%; padding: 14px 18px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 14px; color: white; outline: none; transition: 0.3s; }
+        .login-btn { width: 100%; padding: 16px; background: white; color: #2c3e3a; border: none; border-radius: 14px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s; }
         .login-error { color: #ffcdd2; font-size: 0.85rem; margin-top: 15px; background: rgba(244,67,54,0.2); padding: 10px; border-radius: 10px; display: none; }
 
-        /* ===== ADMIN PANEL PREMIUM ===== */
         #adminPanel { display: none; }
         .admin-container { padding: 40px 20px; max-width: 1200px; margin: 80px auto; }
         .admin-card { background: var(--color-bg-light); border-radius: 24px; padding: 35px; box-shadow: var(--shadow-medium); }
@@ -42,8 +26,6 @@
         .header-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; margin-bottom: 20px; }
         
         .filter-bar { display: flex; gap: 15px; flex-wrap: wrap; background: rgba(0,0,0,0.03); padding: 15px; border-radius: 15px; margin-bottom: 25px; align-items: center; }
-        .filter-group { display: flex; align-items: center; gap: 10px; }
-        .filter-input { padding: 8px 12px; border-radius: 10px; border: 1px solid #ddd; outline: none; }
         .btn-filter { padding: 8px 16px; border-radius: 10px; border: 1px solid var(--color-primary); background: transparent; color: var(--color-primary-dark); cursor: pointer; font-weight: 600; transition: 0.3s; }
         .btn-filter.active { background: var(--color-primary); color: white; }
 
@@ -60,9 +42,7 @@
         .btn-action { width: 36px; height: 36px; border-radius: 10px; border: none; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; }
         .btn-complete { background: #e8f5e9; color: #2e7d32; margin-right: 5px; }
         .btn-delete { background: #ffebee; color: #c62828; }
-        
         [data-theme="dark"] .admin-card { background: #1e1e1e; border: 1px solid #333; }
-        [data-theme="dark"] .stat-chip { background: #2a2a2a; }
         [data-theme="dark"] td { color: #f0f0f0; }
     </style>
 </head>
@@ -99,14 +79,13 @@
                     </div>
                     
                     <div class="filter-bar">
-                        <div class="filter-group"><label>📅 Por día:</label><input type="date" id="filterDate" class="filter-input" onchange="renderCitas()"></div>
+                        <div class="filter-group"><label>📅 Fecha:</label><input type="date" id="filterDate" onchange="renderCitas()"></div>
                         <div class="filter-group">
-                            <label>Estado:</label>
                             <button onclick="setFilterStatus('Todos')" class="btn-filter active" id="fAll">Todos</button>
                             <button onclick="setFilterStatus('Pendiente')" class="btn-filter" id="fPend">Pendientes</button>
                             <button onclick="setFilterStatus('Completada')" class="btn-filter" id="fComp">Completadas</button>
                         </div>
-                        <button onclick="limpiarFiltros()" style="font-size: 0.8rem; background:none; border:none; color:var(--color-primary-dark); cursor:pointer; text-decoration:underline;">Limpiar filtros</button>
+                        <button onclick="limpiarFiltros()" style="background:none; border:none; color:gray; cursor:pointer; text-decoration:underline;">Limpiar</button>
                     </div>
 
                     <div class="stats-bar" id="statsBar"></div>
@@ -122,7 +101,7 @@
         const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhubGRnem9ja3VmaWtuaXZ2ZmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNzkzMjIsImV4cCI6MjA5MzY1NTMyMn0.s8X1YX9qfeJXLD6PUVJkKoobgnpf_5A098JZQE7Feqk';
         const sup = window.supabase ? window.supabase.createClient(S_URL, S_KEY) : null;
         
-        let allCitas = []; let filterStatus = 'Todos';
+        let allCitas = []; let filterStatus = 'Todos'; let dbPK = 'id';
 
         function checkLogin(e) {
             e.preventDefault();
@@ -151,14 +130,22 @@
 
         async function renderCitas() {
             const list = document.getElementById('appointmentsList');
-            list.innerHTML = '<p style="text-align:center; padding:40px;">⏳ Cargando citas...</p>';
+            list.innerHTML = '<p style="text-align:center; padding:40px;">⏳ Cargando...</p>';
             let cloud = [];
             let local = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
+            
             if(sup) {
-                const { data } = await sup.from('citas').select('*');
-                if(data) cloud = data.map(c => ({...c, _src: 'cloud'}));
+                try {
+                    const { data, error } = await sup.from('citas').select('*');
+                    if(data && data.length > 0) {
+                        // Detectar PK real de la tabla
+                        dbPK = Object.keys(data[0]).find(k => k==='id' || k==='ID' || k==='created_at') || 'id';
+                        cloud = data.map(c => ({...c, _src: 'cloud', _id: c[dbPK]}));
+                    }
+                } catch (e) { console.error('Error:', e); }
             }
-            allCitas = [...cloud, ...local.map(c => ({...c, _src: 'local'}))];
+            
+            allCitas = [...cloud, ...local.map(c => ({...c, _src: 'local', _id: c.id || c.created_at || c.nombre}))];
             aplicarFiltros();
         }
 
@@ -175,22 +162,22 @@
             document.getElementById('statsBar').innerHTML = `<span class="stat-chip">📌 Total: ${allCitas.length}</span><span class="stat-chip" style="color:#ef6c00;">⏳ Pendientes: ${p}</span><span class="stat-chip" style="color:#2e7d32;">✅ Completadas: ${c}</span>`;
 
             if(filtered.length === 0) { list.innerHTML = '<p style="text-align:center; padding:40px;">No hay citas.</p>'; return; }
+            
             let h = '<table class="appointments-table"><thead><tr><th>Cliente</th><th>Servicio</th><th>Fecha / Hora</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>';
             filtered.forEach(item => {
-                const id = JSON.stringify(item.id || item.created_at || item.nombre);
-                h += `<tr><td><strong>${item.nombre}</strong></td><td>${item.servicio}</td><td>${item.fecha} ${item.hora}</td><td><span class="status-badge status-${item.estado.toLowerCase()}">${item.estado}</span></td><td>${item.estado==='Pendiente'?`<button onclick="cambiarEstado(${id},'Completada','${item._src}')" class="btn-action btn-complete">✓</button>`:''}<button onclick="borrarCita(${id},'${item._src}')" class="btn-action btn-delete">🗑️</button></td></tr>`;
+                const idVal = JSON.stringify(item._id);
+                h += `<tr><td><strong>${item.nombre}</strong></td><td>${item.servicio}</td><td>${item.fecha} ${item.hora}</td><td><span class="status-badge status-${item.estado.toLowerCase()}">${item.estado}</span></td><td>${item.estado==='Pendiente'?`<button onclick="cambiarEstado(${idVal},'Completada','${item._src}')" class="btn-action btn-complete">✓</button>`:''}<button onclick="borrarCita(${idVal},'${item._src}')" class="btn-action btn-delete">🗑️</button></td></tr>`;
             });
             list.innerHTML = h + '</tbody></table>';
         }
 
         async function cambiarEstado(id, st, src) {
             if(src==='cloud' && sup) {
-                const { data } = await sup.from('citas').select('*').limit(1);
-                const pk = data && data[0] ? Object.keys(data[0]).find(k => k==='id'||k==='created_at'||k==='nombre') : 'id';
-                await sup.from('citas').update({ estado: st }).eq(pk, id);
+                const { error } = await sup.from('citas').update({ estado: st }).eq(dbPK, id);
+                if(error) alert('Error en la nube');
             } else {
                 let items = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
-                items = items.map(c => (c.id==id||c.created_at==id||c.nombre==id)?{...c, estado: st}:c);
+                items = items.map(c => (c.id == id || c.created_at == id || c.nombre == id)?{...c, estado: st}:c);
                 localStorage.setItem('citas_manos_fatima', JSON.stringify(items));
             }
             renderCitas();
@@ -199,9 +186,8 @@
         async function borrarCita(id, src) {
             if(!confirm('¿Borrar cita?')) return;
             if(src==='cloud' && sup) {
-                const { data } = await sup.from('citas').select('*').limit(1);
-                const pk = data && data[0] ? Object.keys(data[0]).find(k => k==='id'||k==='created_at'||k==='nombre') : 'id';
-                await sup.from('citas').delete().eq(pk, id);
+                const { error } = await sup.from('citas').delete().eq(dbPK, id);
+                if(error) alert('Error al borrar en la nube');
             } else {
                 let items = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
                 items = items.filter(c => (c.id!=id && c.created_at!=id && c.nombre!=id));
