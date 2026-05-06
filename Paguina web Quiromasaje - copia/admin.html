@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -35,33 +35,11 @@
             from { opacity:0; transform: translateY(30px); }
             to   { opacity:1; transform: translateY(0); }
         }
-        .login-logo {
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
-        .login-card h2 {
-            color: white;
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            margin-bottom: 5px;
-        }
-        .login-card p {
-            color: rgba(255,255,255,0.7);
-            font-size: 0.9rem;
-            margin-bottom: 30px;
-        }
-        .login-field {
-            margin-bottom: 16px;
-            text-align: left;
-        }
-        .login-field label {
-            display: block;
-            color: rgba(255,255,255,0.85);
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 6px;
-            letter-spacing: 0.5px;
-        }
+        .login-logo { font-size: 3rem; margin-bottom: 10px; }
+        .login-card h2 { color: white; font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 5px; }
+        .login-card p { color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-bottom: 30px; }
+        .login-field { margin-bottom: 16px; text-align: left; }
+        .login-field label { display: block; color: rgba(255,255,255,0.85); font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; letter-spacing: 0.5px; }
         .login-field input {
             width: 100%;
             padding: 14px 18px;
@@ -74,11 +52,6 @@
             outline: none;
             transition: all 0.3s ease;
         }
-        .login-field input::placeholder { color: rgba(255,255,255,0.5); }
-        .login-field input:focus {
-            border-color: rgba(255,255,255,0.7);
-            background: rgba(255,255,255,0.22);
-        }
         .login-btn {
             width: 100%;
             padding: 16px;
@@ -88,54 +61,30 @@
             border-radius: 14px;
             font-size: 1rem;
             font-weight: 700;
-            font-family: 'Poppins', sans-serif;
             cursor: pointer;
             margin-top: 10px;
             transition: all 0.3s ease;
-            letter-spacing: 0.5px;
         }
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        .login-error {
-            color: #ffcdd2;
-            font-size: 0.85rem;
-            margin-top: 12px;
-            display: none;
-            background: rgba(244,67,54,0.2);
-            padding: 10px;
-            border-radius: 10px;
-        }
+        .login-error { color: #ffcdd2; font-size: 0.85rem; margin-top: 12px; display: none; background: rgba(244,67,54,0.2); padding: 10px; border-radius: 10px; }
 
         /* ===== ADMIN PANEL ===== */
         #adminPanel { display: none; }
         .admin-container { padding: 40px 20px; max-width: 1100px; margin: 80px auto; }
         .admin-card { background: var(--color-bg-light); border-radius: 20px; padding: 30px; box-shadow: var(--shadow-medium); }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid var(--color-primary-light); padding-bottom: 15px; flex-wrap: wrap; gap: 10px; }
-        .admin-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .admin-actions { display: flex; gap: 10px; }
         .appointments-table { width: 100%; border-collapse: collapse; margin-top: 20px; overflow-x: auto; display: block; }
-        .appointments-table th { background: var(--color-primary); color: white; padding: 14px 15px; text-align: left; font-weight: 600; font-size: 0.9rem; }
-        .appointments-table th:first-child { border-radius: 10px 0 0 10px; }
-        .appointments-table th:last-child { border-radius: 0 10px 10px 0; }
+        .appointments-table th { background: var(--color-primary); color: white; padding: 14px 15px; text-align: left; font-weight: 600; }
         .appointments-table td { padding: 14px 15px; border-bottom: 1px solid rgba(0,0,0,0.06); font-size: 0.9rem; }
-        .appointments-table tr:hover td { background: rgba(125,157,127,0.05); }
-        .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; white-space: nowrap; }
+        .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
         .status-pendiente { background: #fff3e0; color: #ef6c00; }
         .status-completada { background: #e8f5e9; color: #2e7d32; }
-        .btn-delete { background: #ffebee; color: #c62828; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
-        .btn-delete:hover { background: #c62828; color: white; }
-        .btn-complete { background: #e8f5e9; color: #2e7d32; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; margin-right: 5px; transition: all 0.2s; }
-        .btn-complete:hover { background: #2e7d32; color: white; }
-        .empty-state { text-align: center; padding: 60px 20px; color: var(--color-text-light); }
-        .empty-state .empty-icon { font-size: 3rem; margin-bottom: 15px; }
-        .stats-bar { display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; }
-        .stat-chip { background: white; border: 2px solid var(--color-primary-light); border-radius: 12px; padding: 10px 20px; font-size: 0.85rem; font-weight: 600; color: var(--color-primary-dark); }
+        .btn-delete { background: #ffebee; color: #c62828; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
+        .btn-complete { background: #e8f5e9; color: #2e7d32; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; margin-right: 5px; }
+        .stat-chip { background: white; border: 2px solid var(--color-primary-light); border-radius: 12px; padding: 10px 20px; font-size: 0.85rem; font-weight: 600; margin-right: 10px; }
         .source-tag { font-size: 0.7rem; color: #999; }
         [data-theme="dark"] .admin-card { background: #1e1e1e; border: 1px solid #333; }
         [data-theme="dark"] td { color: #f0f0f0; }
-        [data-theme="dark"] .stat-chip { background: #2a2a2a; }
-        [data-theme="dark"] .appointments-table tr:hover td { background: rgba(255,255,255,0.04); }
     </style>
 </head>
 <body>
@@ -146,18 +95,17 @@
             <div class="login-logo">🌿</div>
             <h2>Panel de Administración</h2>
             <p>Las Manos de Fátima — Acceso privado</p>
-
             <form id="loginForm" onsubmit="checkLogin(event)">
                 <div class="login-field">
                     <label>👤 Usuario</label>
-                    <input type="text" id="loginUser" placeholder="Introduce tu usuario" autocomplete="username" required>
+                    <input type="text" id="loginUser" required>
                 </div>
                 <div class="login-field">
                     <label>🔒 Contraseña</label>
-                    <input type="password" id="loginPass" placeholder="Introduce tu contraseña" autocomplete="current-password" required>
+                    <input type="password" id="loginPass" required>
                 </div>
                 <button type="submit" class="login-btn">Entrar al Panel →</button>
-                <div id="loginError" class="login-error">❌ Usuario o contraseña incorrectos</div>
+                <div id="loginError" class="login-error">❌ Credenciales incorrectas</div>
             </form>
         </div>
     </div>
@@ -167,12 +115,10 @@
         <header id="header">
             <nav class="navbar">
                 <div class="container">
-                    <a href="index.html" class="logo">
-                        <div class="logo-text"><h1>Panel Admin</h1></div>
-                    </a>
-                    <div style="display:flex; gap: 15px; align-items: center;">
-                        <a href="index.html" class="nav-link">🌐 Ver web</a>
-                        <button onclick="cerrarSesion()" class="nav-link" style="background:none;border:none;cursor:pointer;color:#c62828;font-weight:600;">🚪 Salir</button>
+                    <a href="index.html" class="logo"><div class="logo-text"><h1>Panel Admin</h1></div></a>
+                    <div style="display:flex; gap: 15px;">
+                        <a href="index.html" class="nav-link">🌐 Web</a>
+                        <button onclick="cerrarSesion()" class="nav-link" style="background:none;border:none;cursor:pointer;color:#c62828;">🚪 Salir</button>
                     </div>
                 </div>
             </nav>
@@ -183,170 +129,119 @@
                 <div class="admin-header">
                     <div>
                         <h2>📋 Gestión de Citas</h2>
-                        <div class="stats-bar" id="statsBar" style="margin-top:12px;"></div>
+                        <div id="statsBar" style="margin-top:12px; display:flex;"></div>
                     </div>
                     <div class="admin-actions">
-                        <button onclick="renderCitas()" class="btn btn-primary" style="padding: 8px 15px; font-size: 0.85rem;">🔄 Actualizar</button>
-                        <button onclick="exportarCitas()" class="btn btn-primary" style="padding: 8px 15px; font-size: 0.85rem; background: #2e7d32;">📥 Exportar</button>
+                        <button onclick="renderCitas()" class="btn btn-primary">🔄</button>
+                        <button onclick="exportarCitas()" class="btn btn-primary" style="background:#2e7d32;">📥</button>
                     </div>
                 </div>
-
-                <div id="appointmentsList">
-                    <div class="empty-state"><p>Cargando citas...</p></div>
-                </div>
+                <div id="appointmentsList"></div>
             </div>
         </div>
     </div>
 
     <script>
-        // ===== CREDENCIALES =====
         const ADMIN_USER = 'fatima';
         const ADMIN_PASS = 'manos2024';
-
-        // ===== SUPABASE =====
         const SUPABASE_URL = 'https://hnldgzockufiknivvfaa.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhubGRnem9ja3VmaWtuaXZ2ZmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNzkzMjIsImV4cCI6MjA5MzY1NTMyMn0.s8X1YX9qfeJXLD6PUVJkKoobgnpf_5A098JZQE7Feqk';
         const _supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
-        // ===== LOGIN =====
         function checkLogin(e) {
             e.preventDefault();
-            const user = document.getElementById('loginUser').value.trim();
-            const pass = document.getElementById('loginPass').value.trim();
-            const errorEl = document.getElementById('loginError');
-
-            if (user === ADMIN_USER && pass === ADMIN_PASS) {
+            if (document.getElementById('loginUser').value === ADMIN_USER && document.getElementById('loginPass').value === ADMIN_PASS) {
                 sessionStorage.setItem('admin_auth', 'true');
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
                 renderCitas();
             } else {
-                errorEl.style.display = 'block';
-                document.getElementById('loginPass').value = '';
-                setTimeout(() => errorEl.style.display = 'none', 3000);
+                document.getElementById('loginError').style.display = 'block';
             }
         }
 
         function cerrarSesion() {
             sessionStorage.removeItem('admin_auth');
-            document.getElementById('adminPanel').style.display = 'none';
-            document.getElementById('loginScreen').style.display = 'flex';
-            document.getElementById('loginUser').value = '';
-            document.getElementById('loginPass').value = '';
+            location.reload();
         }
 
-        // Auto-login si ya está autenticado en esta sesión
         if (sessionStorage.getItem('admin_auth') === 'true') {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('adminPanel').style.display = 'block';
-            renderCitas();
+            setTimeout(renderCitas, 100);
         }
 
-        // ===== RENDER CITAS =====
         async function renderCitas() {
             const listContainer = document.getElementById('appointmentsList');
-            listContainer.innerHTML = '<div class="empty-state"><p>⏳ Cargando citas...</p></div>';
-            let citasCloud = [];
-            let citasLocal = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
+            listContainer.innerHTML = '<p>Cargando...</p>';
+            let cloud = [];
+            let local = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
 
             if (_supabase) {
-                try {
-                    const { data, error } = await _supabase.from('citas').select('*');
-                    if (!error && data) citasCloud = data.map(c => ({ ...c, _source: 'cloud' }));
-                } catch (e) {
-                    console.error('Error leyendo de Supabase:', e);
-                }
+                const { data } = await _supabase.from('citas').select('*');
+                if (data) cloud = data.map(c => ({ ...c, _source: 'cloud' }));
             }
 
-            const citasLocalTagged = citasLocal.map(c => ({ ...c, _source: 'local' }));
-            const citas = [...citasCloud, ...citasLocalTagged];
+            const total = [...cloud, ...local.map(c => ({ ...c, _source: 'local' }))];
+            
+            document.getElementById('statsBar').innerHTML = `<span class="stat-chip">Total: ${total.length}</span>`;
 
-            // Stats
-            const pendientes = citas.filter(c => c.estado === 'Pendiente').length;
-            const completadas = citas.filter(c => c.estado === 'Completada').length;
-            document.getElementById('statsBar').innerHTML = `
-                <span class="stat-chip">📌 Total: ${citas.length}</span>
-                <span class="stat-chip" style="border-color:#ef6c00;color:#ef6c00;">⏳ Pendientes: ${pendientes}</span>
-                <span class="stat-chip" style="border-color:#2e7d32;color:#2e7d32;">✅ Completadas: ${completadas}</span>
-                ${citasCloud.length > 0 ? '<span class="stat-chip" style="border-color:#1565c0;color:#1565c0;">☁️ En nube: ' + citasCloud.length + '</span>' : ''}
-            `;
-
-            if (citas.length === 0) {
-                listContainer.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">📭</div>
-                        <h3>No hay citas registradas todavía</h3>
-                        <p>Las nuevas reservas aparecerán aquí automáticamente.</p>
-                    </div>`;
+            if (total.length === 0) {
+                listContainer.innerHTML = '<p>No hay citas.</p>';
                 return;
             }
 
-            let html = `
-                <table class="appointments-table">
-                    <thead>
-                        <tr>
-                            <th>Cliente</th>
-                            <th>Servicio</th>
-                            <th>Fecha / Hora</th>
-                            <th>Estado</th>
-                            <th>Origen</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-
-            citas.forEach((cita, idx) => {
-                const pkName = Object.keys(cita)[0]; const idStr = JSON.stringify(cita[pkName] || cita.id);
-                html += `
-                    <tr>
-                        <td><strong>${cita.nombre || 'N/A'}</strong></td>
-                        <td>${cita.servicio ? cita.servicio.split('-')[0].trim() : 'N/A'}</td>
-                        <td>${cita.fecha || '—'} &nbsp; ${cita.hora || ''}</td>
-                        <td><span class="status-badge status-${(cita.estado || 'pendiente').toLowerCase()}">${cita.estado || 'Pendiente'}</span></td>
-                        <td><span class="source-tag">${cita._source === 'cloud' ? '☁️ Nube' : '💾 Local'}</span></td>
-                        <td>
-                            ${(cita.estado || '') === 'Pendiente' ? `<button onclick="cambiarEstado(${idStr}, 'Completada', '${cita._source}')" class="btn-complete" title="Marcar completada">✓</button>` : ''}
-                            <button onclick="borrarCita(${idStr}, '${cita._source}')" class="btn-delete" title="Eliminar">🗑️</button>
-                        </td>
-                    </tr>
-                `;
+            let html = '<table class="appointments-table"><thead><tr><th>Cliente</th><th>Servicio</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>';
+            total.forEach(cita => {
+                const pk = Object.keys(cita)[0];
+                const id = cita[pk];
+                html += `<tr>
+                    <td>${cita.nombre}</td>
+                    <td>${cita.servicio}</td>
+                    <td>${cita.fecha} ${cita.hora}</td>
+                    <td><span class="status-badge status-${cita.estado.toLowerCase()}">${cita.estado}</span></td>
+                    <td>
+                        <button onclick="cambiarEstado('${id}', 'Completada', '${cita._source}')" class="btn-complete">✓</button>
+                        <button onclick="borrarCita('${id}', '${cita._source}')" class="btn-delete">🗑️</button>
+                    </td>
+                </tr>`;
             });
-
-            html += '</tbody></table>';
-            listContainer.innerHTML = html;
+            listContainer.innerHTML = html + '</tbody></table>';
         }
 
-        async function cambiarEstado(id, nuevoEstado, source) {
+        async function cambiarEstado(id, estado, source) {
             if (source === 'cloud' && _supabase) {
-                const { data: cols } = await _supabase.from('citas').select('*').limit(1); const pk = cols && cols[0] ? Object.keys(cols[0])[0] : 'id'; await _supabase.from('citas').update({ estado: nuevoEstado }).eq(pk, id);
+                const { data } = await _supabase.from('citas').select('*').limit(1);
+                const pk = data ? Object.keys(data[0])[0] : 'id';
+                await _supabase.from('citas').update({ estado }).eq(pk, id);
             } else {
-                let citas = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
-                citas = citas.map(c => c.id == id ? { ...c, estado: nuevoEstado } : c);
-                localStorage.setItem('citas_manos_fatima', JSON.stringify(citas));
+                let items = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
+                items = items.map(c => c.id == id ? { ...c, estado } : c);
+                localStorage.setItem('citas_manos_fatima', JSON.stringify(items));
             }
             renderCitas();
         }
 
         async function borrarCita(id, source) {
-            if (!confirm('¿Seguro que quieres eliminar este registro?')) return;
+            if (!confirm('¿Borrar?')) return;
             if (source === 'cloud' && _supabase) {
-                const { data: cols } = await _supabase.from('citas').select('*').limit(1); const pk = cols && cols[0] ? Object.keys(cols[0])[0] : 'id'; await _supabase.from('citas').delete().eq(pk, id);
+                const { data } = await _supabase.from('citas').select('*').limit(1);
+                const pk = data ? Object.keys(data[0])[0] : 'id';
+                await _supabase.from('citas').delete().eq(pk, id);
             } else {
-                let citas = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
-                citas = citas.filter(c => c.id != id);
-                localStorage.setItem('citas_manos_fatima', JSON.stringify(citas));
+                let items = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
+                items = items.filter(c => c.id != id);
+                localStorage.setItem('citas_manos_fatima', JSON.stringify(items));
             }
             renderCitas();
         }
 
         function exportarCitas() {
-            const citas = localStorage.getItem('citas_manos_fatima') || '[]';
-            const blob = new Blob([citas], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
+            const data = localStorage.getItem('citas_manos_fatima');
+            const blob = new Blob([data], { type: 'application/json' });
             const a = document.createElement('a');
-            a.href = url;
-            a.download = 'citas_manos_fatima.json';
+            a.href = URL.createObjectURL(blob);
+            a.download = 'citas.json';
             a.click();
         }
     </script>
