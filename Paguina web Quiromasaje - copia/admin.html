@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -251,7 +251,7 @@
 
             if (_supabase) {
                 try {
-                    const { data, error } = await _supabase.from('citas').select('*').order('id', { ascending: false });
+                    const { data, error } = await _supabase.from('citas').select('*');
                     if (!error && data) citasCloud = data.map(c => ({ ...c, _source: 'cloud' }));
                 } catch (e) {
                     console.error('Error leyendo de Supabase:', e);
