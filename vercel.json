@@ -1,0 +1,12 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/admin", "destination": "/Paguina web Quiromasaje - copia/admin.html" },
+    { "source": "/reservar", "destination": "/Paguina web Quiromasaje - copia/reservar.html" },
+    { "source": "/contacto", "destination": "/Paguina web Quiromasaje - copia/contacto.html" },
+    { "source": "/servicios", "destination": "/Paguina web Quiromasaje - copia/servicios.html" },
+    { "source": "/sobre-mi", "destination": "/Paguina web Quiromasaje - copia/sobre-mi.html" },
+    { "source": "/gracias", "destination": "/Paguina web Quiromasaje - copia/gracias.html" },
+    { "source": "/(.*)", "destination": "/Paguina web Quiromasaje - copia/$1" }
+  ]
+}
