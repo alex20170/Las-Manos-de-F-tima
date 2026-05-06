@@ -5,75 +5,279 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración | Las Manos de Fátima</title>
     <link rel="stylesheet" href="css/styles.css">
-    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        .admin-container { padding: 40px 20px; max-width: 1000px; margin: 80px auto; }
+        /* ===== LOGIN SCREEN ===== */
+        #loginScreen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #2c3e3a 0%, #4a6741 50%, #7d9d7f 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+        .login-card {
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 28px;
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: slideUp 0.5s cubic-bezier(0.16,1,0.3,1);
+        }
+        @keyframes slideUp {
+            from { opacity:0; transform: translateY(30px); }
+            to   { opacity:1; transform: translateY(0); }
+        }
+        .login-logo {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        .login-card h2 {
+            color: white;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        .login-card p {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+        .login-field {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+        .login-field label {
+            display: block;
+            color: rgba(255,255,255,0.85);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+        .login-field input {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 14px;
+            color: white;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .login-field input::placeholder { color: rgba(255,255,255,0.5); }
+        .login-field input:focus {
+            border-color: rgba(255,255,255,0.7);
+            background: rgba(255,255,255,0.22);
+        }
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: white;
+            color: #2c3e3a;
+            border: none;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .login-error {
+            color: #ffcdd2;
+            font-size: 0.85rem;
+            margin-top: 12px;
+            display: none;
+            background: rgba(244,67,54,0.2);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        /* ===== ADMIN PANEL ===== */
+        #adminPanel { display: none; }
+        .admin-container { padding: 40px 20px; max-width: 1100px; margin: 80px auto; }
         .admin-card { background: var(--color-bg-light); border-radius: 20px; padding: 30px; box-shadow: var(--shadow-medium); }
-        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid var(--color-primary-light); padding-bottom: 15px; }
-        .appointments-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .appointments-table th, .appointments-table td { padding: 15px; text-align: left; border-bottom: 1px solid rgba(0,0,0,0.1); }
-        .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid var(--color-primary-light); padding-bottom: 15px; flex-wrap: wrap; gap: 10px; }
+        .admin-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .appointments-table { width: 100%; border-collapse: collapse; margin-top: 20px; overflow-x: auto; display: block; }
+        .appointments-table th { background: var(--color-primary); color: white; padding: 14px 15px; text-align: left; font-weight: 600; font-size: 0.9rem; }
+        .appointments-table th:first-child { border-radius: 10px 0 0 10px; }
+        .appointments-table th:last-child { border-radius: 0 10px 10px 0; }
+        .appointments-table td { padding: 14px 15px; border-bottom: 1px solid rgba(0,0,0,0.06); font-size: 0.9rem; }
+        .appointments-table tr:hover td { background: rgba(125,157,127,0.05); }
+        .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; white-space: nowrap; }
         .status-pendiente { background: #fff3e0; color: #ef6c00; }
         .status-completada { background: #e8f5e9; color: #2e7d32; }
-        .btn-delete { background: #ffebee; color: #c62828; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
-        .btn-complete { background: #e8f5e9; color: #2e7d32; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; margin-right: 5px; }
-        .empty-state { text-align: center; padding: 50px; color: var(--color-text-light); }
+        .btn-delete { background: #ffebee; color: #c62828; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        .btn-delete:hover { background: #c62828; color: white; }
+        .btn-complete { background: #e8f5e9; color: #2e7d32; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; margin-right: 5px; transition: all 0.2s; }
+        .btn-complete:hover { background: #2e7d32; color: white; }
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--color-text-light); }
+        .empty-state .empty-icon { font-size: 3rem; margin-bottom: 15px; }
+        .stats-bar { display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; }
+        .stat-chip { background: white; border: 2px solid var(--color-primary-light); border-radius: 12px; padding: 10px 20px; font-size: 0.85rem; font-weight: 600; color: var(--color-primary-dark); }
+        .source-tag { font-size: 0.7rem; color: #999; }
         [data-theme="dark"] .admin-card { background: #1e1e1e; border: 1px solid #333; }
         [data-theme="dark"] td { color: #f0f0f0; }
+        [data-theme="dark"] .stat-chip { background: #2a2a2a; }
+        [data-theme="dark"] .appointments-table tr:hover td { background: rgba(255,255,255,0.04); }
     </style>
 </head>
 <body>
-    <header id="header">
-        <nav class="navbar">
-            <div class="container">
-                <a href="index.html" class="logo">
-                    <div class="logo-text"><h1>Panel Admin</h1></div>
-                </a>
-                <a href="index.html" class="nav-link">Volver a la web</a>
-            </div>
-        </nav>
-    </header>
 
-    <div class="admin-container">
-        <div class="admin-card">
-            <div class="admin-header">
-                <h2>Gestión de Citas</h2>
-                <button onclick="exportarCitas()" class="btn btn-primary" style="padding: 8px 15px; font-size: 0.8rem;">Exportar Excel</button>
-            </div>
-            
-            <div id="appointmentsList">
-                <!-- Las citas se cargarán aquí -->
+    <!-- ===== PANTALLA DE LOGIN ===== -->
+    <div id="loginScreen">
+        <div class="login-card">
+            <div class="login-logo">🌿</div>
+            <h2>Panel de Administración</h2>
+            <p>Las Manos de Fátima — Acceso privado</p>
+
+            <form id="loginForm" onsubmit="checkLogin(event)">
+                <div class="login-field">
+                    <label>👤 Usuario</label>
+                    <input type="text" id="loginUser" placeholder="Introduce tu usuario" autocomplete="username" required>
+                </div>
+                <div class="login-field">
+                    <label>🔒 Contraseña</label>
+                    <input type="password" id="loginPass" placeholder="Introduce tu contraseña" autocomplete="current-password" required>
+                </div>
+                <button type="submit" class="login-btn">Entrar al Panel →</button>
+                <div id="loginError" class="login-error">❌ Usuario o contraseña incorrectos</div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== PANEL DE ADMIN ===== -->
+    <div id="adminPanel">
+        <header id="header">
+            <nav class="navbar">
+                <div class="container">
+                    <a href="index.html" class="logo">
+                        <div class="logo-text"><h1>Panel Admin</h1></div>
+                    </a>
+                    <div style="display:flex; gap: 15px; align-items: center;">
+                        <a href="index.html" class="nav-link">🌐 Ver web</a>
+                        <button onclick="cerrarSesion()" class="nav-link" style="background:none;border:none;cursor:pointer;color:#c62828;font-weight:600;">🚪 Salir</button>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <div class="admin-container">
+            <div class="admin-card">
+                <div class="admin-header">
+                    <div>
+                        <h2>📋 Gestión de Citas</h2>
+                        <div class="stats-bar" id="statsBar" style="margin-top:12px;"></div>
+                    </div>
+                    <div class="admin-actions">
+                        <button onclick="renderCitas()" class="btn btn-primary" style="padding: 8px 15px; font-size: 0.85rem;">🔄 Actualizar</button>
+                        <button onclick="exportarCitas()" class="btn btn-primary" style="padding: 8px 15px; font-size: 0.85rem; background: #2e7d32;">📥 Exportar</button>
+                    </div>
+                </div>
+
+                <div id="appointmentsList">
+                    <div class="empty-state"><p>Cargando citas...</p></div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        // ===== CREDENCIALES =====
+        const ADMIN_USER = 'fatima';
+        const ADMIN_PASS = 'manos2024';
+
+        // ===== SUPABASE =====
         const SUPABASE_URL = 'https://hnldgzockufiknivvfaa.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhubGRnem9ja3VmaWtuaXZ2ZmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNzkzMjIsImV4cCI6MjA5MzY1NTMyMn0.s8X1YX9qfeJXLD6PUVJkKoobgnpf_5A098JZQE7Feqk';
         const _supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
+        // ===== LOGIN =====
+        function checkLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('loginUser').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+            const errorEl = document.getElementById('loginError');
+
+            if (user === ADMIN_USER && pass === ADMIN_PASS) {
+                sessionStorage.setItem('admin_auth', 'true');
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                renderCitas();
+            } else {
+                errorEl.style.display = 'block';
+                document.getElementById('loginPass').value = '';
+                setTimeout(() => errorEl.style.display = 'none', 3000);
+            }
+        }
+
+        function cerrarSesion() {
+            sessionStorage.removeItem('admin_auth');
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('loginUser').value = '';
+            document.getElementById('loginPass').value = '';
+        }
+
+        // Auto-login si ya está autenticado en esta sesión
+        if (sessionStorage.getItem('admin_auth') === 'true') {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            renderCitas();
+        }
+
+        // ===== RENDER CITAS =====
         async function renderCitas() {
             const listContainer = document.getElementById('appointmentsList');
+            listContainer.innerHTML = '<div class="empty-state"><p>⏳ Cargando citas...</p></div>';
             let citasCloud = [];
             let citasLocal = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
 
-            // 1. Intentar traer de la nube
             if (_supabase) {
                 try {
                     const { data, error } = await _supabase.from('citas').select('*').order('id', { ascending: false });
-                    if (!error && data) citasCloud = data;
+                    if (!error && data) citasCloud = data.map(c => ({ ...c, _source: 'cloud' }));
                 } catch (e) {
-                    console.error("Error leyendo de Supabase:", e);
+                    console.error('Error leyendo de Supabase:', e);
                 }
             }
 
-            // 2. Combinar ambas (evitando duplicados por ID si fuera necesario, 
-            // pero aquí las locales suelen ser las que no subieron)
-            const citas = [...citasCloud, ...citasLocal];
+            const citasLocalTagged = citasLocal.map(c => ({ ...c, _source: 'local' }));
+            const citas = [...citasCloud, ...citasLocalTagged];
+
+            // Stats
+            const pendientes = citas.filter(c => c.estado === 'Pendiente').length;
+            const completadas = citas.filter(c => c.estado === 'Completada').length;
+            document.getElementById('statsBar').innerHTML = `
+                <span class="stat-chip">📌 Total: ${citas.length}</span>
+                <span class="stat-chip" style="border-color:#ef6c00;color:#ef6c00;">⏳ Pendientes: ${pendientes}</span>
+                <span class="stat-chip" style="border-color:#2e7d32;color:#2e7d32;">✅ Completadas: ${completadas}</span>
+                ${citasCloud.length > 0 ? '<span class="stat-chip" style="border-color:#1565c0;color:#1565c0;">☁️ En nube: ' + citasCloud.length + '</span>' : ''}
+            `;
 
             if (citas.length === 0) {
-                listContainer.innerHTML = '<div class="empty-state"><h3>No hay citas registradas todavía</h3><p>Las nuevas reservas aparecerán aquí automáticamente.</p></div>';
+                listContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📭</div>
+                        <h3>No hay citas registradas todavía</h3>
+                        <p>Las nuevas reservas aparecerán aquí automáticamente.</p>
+                    </div>`;
                 return;
             }
 
@@ -83,24 +287,27 @@
                         <tr>
                             <th>Cliente</th>
                             <th>Servicio</th>
-                            <th>Fecha/Hora</th>
+                            <th>Fecha / Hora</th>
                             <th>Estado</th>
+                            <th>Origen</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
             `;
 
-            citas.forEach(cita => {
+            citas.forEach((cita, idx) => {
+                const idStr = JSON.stringify(cita.id);
                 html += `
                     <tr>
-                        <td><strong>${cita.nombre}</strong></td>
-                        <td>${cita.servicio ? cita.servicio.split('-')[0] : 'N/A'}</td>
-                        <td>${cita.fecha} a las ${cita.hora}</td>
-                        <td><span class="status-badge status-${cita.estado.toLowerCase()}">${cita.estado}</span></td>
+                        <td><strong>${cita.nombre || 'N/A'}</strong></td>
+                        <td>${cita.servicio ? cita.servicio.split('-')[0].trim() : 'N/A'}</td>
+                        <td>${cita.fecha || '—'} &nbsp; ${cita.hora || ''}</td>
+                        <td><span class="status-badge status-${(cita.estado || 'pendiente').toLowerCase()}">${cita.estado || 'Pendiente'}</span></td>
+                        <td><span class="source-tag">${cita._source === 'cloud' ? '☁️ Nube' : '💾 Local'}</span></td>
                         <td>
-                            ${cita.estado === 'Pendiente' ? `<button onclick="cambiarEstado(${cita.id}, 'Completada')" class="btn-complete">✓</button>` : ''}
-                            <button onclick="borrarCita(${cita.id})" class="btn-delete">🗑️</button>
+                            ${(cita.estado || '') === 'Pendiente' ? `<button onclick="cambiarEstado(${idStr}, 'Completada', '${cita._source}')" class="btn-complete" title="Marcar completada">✓</button>` : ''}
+                            <button onclick="borrarCita(${idStr}, '${cita._source}')" class="btn-delete" title="Eliminar">🗑️</button>
                         </td>
                     </tr>
                 `;
@@ -110,42 +317,38 @@
             listContainer.innerHTML = html;
         }
 
-        async function cambiarEstado(id, nuevoEstado) {
-            if (_supabase) {
+        async function cambiarEstado(id, nuevoEstado, source) {
+            if (source === 'cloud' && _supabase) {
                 await _supabase.from('citas').update({ estado: nuevoEstado }).eq('id', id);
             } else {
                 let citas = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
-                citas = citas.map(c => c.id === id ? {...c, estado: nuevoEstado} : c);
+                citas = citas.map(c => c.id == id ? { ...c, estado: nuevoEstado } : c);
                 localStorage.setItem('citas_manos_fatima', JSON.stringify(citas));
             }
             renderCitas();
         }
 
-        async function borrarCita(id) {
-            if (confirm('¿Seguro que quieres eliminar este registro?')) {
-                if (_supabase) {
-                    await _supabase.from('citas').delete().eq('id', id);
-                } else {
-                    let citas = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
-                    citas = citas.filter(c => c.id !== id);
-                    localStorage.setItem('citas_manos_fatima', JSON.stringify(citas));
-                }
-                renderCitas();
+        async function borrarCita(id, source) {
+            if (!confirm('¿Seguro que quieres eliminar este registro?')) return;
+            if (source === 'cloud' && _supabase) {
+                await _supabase.from('citas').delete().eq('id', id);
+            } else {
+                let citas = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
+                citas = citas.filter(c => c.id != id);
+                localStorage.setItem('citas_manos_fatima', JSON.stringify(citas));
             }
+            renderCitas();
         }
 
         function exportarCitas() {
-            const citas = localStorage.getItem('citas_manos_fatima');
-            const blob = new Blob([citas], {type: 'application/json'});
+            const citas = localStorage.getItem('citas_manos_fatima') || '[]';
+            const blob = new Blob([citas], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = 'citas_manos_fatima.json';
             a.click();
         }
-
-        // Cargar citas al iniciar
-        renderCitas();
     </script>
 </body>
 </html>
