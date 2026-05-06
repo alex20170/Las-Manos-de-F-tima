@@ -1,4 +1,4 @@
-/* ========================================
+﻿/* ========================================
    VARIABLES Y FUENTES
 ======================================== */
 
@@ -142,7 +142,7 @@ button {
 }
 
 /* ========================================
-   HEADER Y NAVEGACIÓN
+   HEADER Y NAVEGACIÃ“N
 ======================================== */
 
 #header {
@@ -436,7 +436,7 @@ button {
 }
 
 /* ========================================
-   SOBRE MÍ
+   SOBRE MÃ
 ======================================== */
 
 .about-content {
@@ -615,7 +615,7 @@ button {
 }
 
 /* ========================================
-   RESEÑAS
+   RESEÃ‘AS
 ======================================== */
 
 .rating-summary {
@@ -851,7 +851,7 @@ button {
 }
 
 .info-card-premium li::before {
-    content: '✓';
+    content: 'âœ“';
     position: absolute;
     left: 0;
     color: var(--color-primary);
@@ -975,7 +975,7 @@ button {
 }
 
 /* ========================================
-   MAPA - CÓMO LLEGAR
+   MAPA - CÃ“MO LLEGAR
 ======================================== */
 
 .map-wrapper {
@@ -1122,7 +1122,7 @@ button {
 }
 
 /* ========================================
-   REPRODUCTOR DE MÚSICA
+   REPRODUCTOR DE MÃšSICA
 ======================================== */
 
 .music-player {
@@ -1190,7 +1190,7 @@ button {
 }
 
 /* ========================================
-   RESPONSIVE - MÓVIL
+   RESPONSIVE - MÃ“VIL
 ======================================== */
 
 @media (max-width: 768px) {
@@ -1202,7 +1202,7 @@ button {
         font-size: 2rem;
     }
     
-    /* Navegación móvil */
+    /* NavegaciÃ³n mÃ³vil */
     .menu-toggle {
         display: flex;
     }
@@ -1258,7 +1258,7 @@ button {
         padding: 14px 35px;
     }
     
-    /* Sobre mí */
+    /* Sobre mÃ­ */
     .about-content {
         grid-template-columns: 1fr;
         text-align: center;
@@ -1283,7 +1283,7 @@ button {
         gap: 25px;
     }
     
-    /* Reseñas */
+    /* ReseÃ±as */
     .reviews-grid {
         grid-template-columns: 1fr;
     }
@@ -1336,7 +1336,7 @@ button {
         height: 28px;
     }
     
-    /* Música */
+    /* MÃºsica */
     .music-player {
         bottom: 90px;
         left: 20px;
@@ -1352,6 +1352,15 @@ button {
 }
 
 @media (max-width: 480px) {
+    .form-row {
+        grid-template-columns: 1fr !important;
+        gap: 15px;
+    }
+
+    input[type="time"] {
+        width: 100% !important;
+        min-height: 54px;
+    }
     .logo-text h1 {
         font-size: 1.2rem;
     }
@@ -1379,7 +1388,7 @@ button {
 }
 
 /* ========================================
-   ESTILOS ADICIONALES MULTI-PÁGINA
+   ESTILOS ADICIONALES MULTI-PÃGINA
    ======================================== */
 
 .page-header {
@@ -1630,7 +1639,7 @@ button {
 }
 
 /* ========================================
-   ESTILOS PREMIUM (M�S CHULO)
+   ESTILOS PREMIUM (MÁS CHULO)
    ======================================== */
 
 .btn-primary {
@@ -1681,4 +1690,5 @@ button {
 .review-card-premium:hover::before {
     opacity: 1;
 }
+
 
