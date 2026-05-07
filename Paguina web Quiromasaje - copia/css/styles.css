@@ -174,13 +174,13 @@ button {
 }
 
 .logo-svg {
-    width: 50px;
-    height: 50px;
+    width: 80px;
+    height: 80px;
 }
 
 .logo-text h1 {
     font-family: var(--font-headings);
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     background: linear-gradient(135deg, var(--color-primary-dark), var(--color-accent));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -1366,8 +1366,8 @@ button {
     }
     
     .logo-svg {
-        width: 40px;
-        height: 40px;
+        width: 60px;
+        height: 60px;
     }
     
     .hero-title {
