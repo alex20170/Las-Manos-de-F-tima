@@ -177,34 +177,32 @@
             if(filtered.length === 0) { list.innerHTML = '<p style="text-align:center; padding:40px;">No hay citas.</p>'; return; }
             let h = '<table class="appointments-table"><thead><tr><th>Cliente</th><th>Servicio</th><th>Fecha / Hora</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>';
             filtered.forEach(item => {
-                const id = JSON.stringify(item.id || item.created_at || item.nombre);
-                h += `<tr><td><strong>${item.nombre}</strong></td><td>${item.servicio}</td><td>${item.fecha} ${item.hora}</td><td><span class="status-badge status-${item.estado.toLowerCase()}">${item.estado}</span></td><td>${item.estado==='Pendiente'?`<button onclick="cambiarEstado(${id},'Completada','${item._src}')" class="btn-action btn-complete">✓</button>`:''}<button onclick="borrarCita(${id},'${item._src}')" class="btn-action btn-delete">🗑️</button></td></tr>`;
+                const pk = item.id ? 'id' : (item.created_at ? 'created_at' : 'nombre');
+                const idVal = JSON.stringify(item[pk]).replace(/"/g, '&quot;');
+                const pkName = JSON.stringify(pk).replace(/"/g, '&quot;');
+                h += `<tr><td><strong>${item.nombre}</strong></td><td>${item.servicio}</td><td>${item.fecha} ${item.hora}</td><td><span class="status-badge status-${item.estado.toLowerCase()}">${item.estado}</span></td><td>${item.estado==='Pendiente'?`<button onclick="cambiarEstado(${idVal},'Completada','${item._src}',${pkName})" class="btn-action btn-complete">✓</button>`:''}<button onclick="borrarCita(${idVal},'${item._src}',${pkName})" class="btn-action btn-delete">🗑️</button></td></tr>`;
             });
             list.innerHTML = h + '</tbody></table>';
         }
 
-        async function cambiarEstado(id, st, src) {
+        async function cambiarEstado(id, st, src, pk) {
             if(src==='cloud' && sup) {
-                const { data } = await sup.from('citas').select('*').limit(1);
-                const pk = data && data[0] ? Object.keys(data[0]).find(k => k==='id'||k==='created_at'||k==='nombre') : 'id';
                 await sup.from('citas').update({ estado: st }).eq(pk, id);
             } else {
                 let items = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
-                items = items.map(c => (c.id==id||c.created_at==id||c.nombre==id)?{...c, estado: st}:c);
+                items = items.map(c => (c[pk]==id)?{...c, estado: st}:c);
                 localStorage.setItem('citas_manos_fatima', JSON.stringify(items));
             }
             renderCitas();
         }
 
-        async function borrarCita(id, src) {
+        async function borrarCita(id, src, pk) {
             if(!confirm('¿Borrar cita?')) return;
             if(src==='cloud' && sup) {
-                const { data } = await sup.from('citas').select('*').limit(1);
-                const pk = data && data[0] ? Object.keys(data[0]).find(k => k==='id'||k==='created_at'||k==='nombre') : 'id';
                 await sup.from('citas').delete().eq(pk, id);
             } else {
                 let items = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
-                items = items.filter(c => (c.id!=id && c.created_at!=id && c.nombre!=id));
+                items = items.filter(c => c[pk]!=id);
                 localStorage.setItem('citas_manos_fatima', JSON.stringify(items));
             }
             renderCitas();

@@ -38,6 +38,50 @@ if (menuToggle) {
 }
 
 // ========================================
+// HERO SLIDER (CARRUSEL)
+// ========================================
+const slides = document.querySelectorAll('.hero-slide');
+const indicators = document.querySelectorAll('.indicator');
+let currentSlide = 0;
+let slideInterval;
+
+function showSlide(n) {
+    if (slides.length === 0) return;
+    slides.forEach(slide => slide.classList.remove('active'));
+    indicators.forEach(ind => ind.classList.remove('active'));
+    
+    currentSlide = (n + slides.length) % slides.length;
+    
+    slides[currentSlide].classList.add('active');
+    indicators[currentSlide].classList.add('active');
+}
+
+function nextSlide() {
+    showSlide(currentSlide + 1);
+}
+
+function startSlideShow() {
+    if (slides.length > 0) {
+        slideInterval = setInterval(nextSlide, 5000);
+    }
+}
+
+function resetSlideShow() {
+    clearInterval(slideInterval);
+    startSlideShow();
+}
+
+if (indicators.length > 0) {
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            showSlide(index);
+            resetSlideShow();
+        });
+    });
+    startSlideShow();
+}
+
+// ========================================
 // CONSUMO DE APIS EXTERNAS
 // ========================================
 
@@ -160,10 +204,11 @@ if (bookingForm) {
         const servicio = document.getElementById('servicio').value;
         const fecha = document.getElementById('fecha').value;
         const hora = document.getElementById('hora').value;
-        const mensaje = document.getElementById('mensaje').value;
+        const mensajeEl = document.getElementById('mensaje');
+        const mensaje = mensajeEl ? mensajeEl.value : '';
 
         // Formatear mensaje para WhatsApp (Sin Emojis)
-        const msg = `NUEVA RESERVA - Las Manos de Fatima\n\nCliente: ${nombre}\nEmail: ${email}\nTel: ${telefono}\nServicio: ${servicio}\nFecha: ${fecha}\nHora: ${hora}\nMensaje: ${mensaje}`;
+        const msg = `NUEVA RESERVA - Las Manos de Fatima\n\nCliente: ${nombre}\nEmail: ${email}\nTel: ${telefono}\nServicio: ${servicio}\nFecha: ${fecha}\nHora: ${hora}${mensaje ? '\nMensaje: ' + mensaje : ''}`;
         const urlWhatsApp = `https://wa.me/34637805557?text=${encodeURIComponent(msg)}`;
 
         // Abrir WhatsApp inmediatamente
@@ -177,10 +222,14 @@ if (bookingForm) {
         };
 
         if (window.supabase) {
-            const S_URL = 'https://hnldgzockufiknivvfaa.supabase.co';
-            const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhubGRnem9ja3VmaWtuaXZ2ZmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNzkzMjIsImV4cCI6MjA5MzY1NTMyMn0.s8X1YX9qfeJXLD6PUVJkKoobgnpf_5A098JZQE7Feqk';
-            const sup = window.supabase.createClient(S_URL, S_KEY);
-            await sup.from('citas').insert([nuevaCita]);
+            try {
+                const S_URL = 'https://hnldgzockufiknivvfaa.supabase.co';
+                const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhubGRnem9ja3VmaWtuaXZ2ZmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNzkzMjIsImV4cCI6MjA5MzY1NTMyMn0.s8X1YX9qfeJXLD6PUVJkKoobgnpf_5A098JZQE7Feqk';
+                const sup = window.supabase.createClient(S_URL, S_KEY);
+                await sup.from('citas').insert([nuevaCita]);
+            } catch (err) {
+                console.error("Error guardando en Supabase:", err);
+            }
         }
 
         // Local backup
@@ -190,6 +239,46 @@ if (bookingForm) {
 
         setTimeout(() => { window.location.href = 'gracias.html'; }, 400);
     });
+}
+
+// Lógica de Selección de Servicio desde Inicio/Servicios
+function selectService(serviceId) {
+    localStorage.setItem('selectedService', serviceId);
+    window.location.href = 'reservar.html';
+}
+
+// Pre-rellenar servicio en reservar.html
+function prefillService() {
+    const serviceSelect = document.getElementById('servicio');
+    if (!serviceSelect) return;
+
+    // 1. Prioridad: Parámetro URL (?servicio=relax)
+    const urlParams = new URLSearchParams(window.location.search);
+    let serviceId = urlParams.get('servicio');
+
+    // 2. Segunda opción: LocalStorage
+    if (!serviceId) {
+        serviceId = localStorage.getItem('selectedService');
+    }
+
+    if (serviceId) {
+        const mapping = {
+            'relax': 'Masaje Relajante - 60min - 35€',
+            'terapeutico': 'Masaje Terapéutico - 75min - 45€',
+            'deportivo': 'Masaje Deportivo - 60min - 40€',
+            'express': 'Masaje Express - 30min - 25€',
+            'reiki': 'Sesión de Reiki - 60min - 30€',
+            'pack': 'Quiromasaje + Reiki - 90min - 55€',
+            'combinado': 'Quiromasaje + Reiki - 90min - 55€'
+        };
+
+        const targetValue = mapping[serviceId];
+        if (targetValue) {
+            serviceSelect.value = targetValue;
+            // Limpiar localStorage una vez usado
+            localStorage.removeItem('selectedService');
+        }
+    }
 }
 
 // Animaciones Scroll
@@ -228,6 +317,85 @@ if (musicToggle) {
 }
 
 // ========================================
+// DISPONIBILIDAD DE HORAS (BLOQUEO)
+// ========================================
+
+async function updateAvailableHours() {
+    const fechaInput = document.getElementById('fecha');
+    const horaSelect = document.getElementById('hora');
+    if (!fechaInput || !horaSelect) return;
+
+    const fechaSeleccionada = fechaInput.value;
+    if (!fechaSeleccionada) return;
+
+    // Resetear opciones y poner estado de carga
+    Array.from(horaSelect.options).forEach(opt => {
+        if (opt.value) {
+            opt.disabled = true;
+            opt.textContent = opt.value + " (Comprobando...)";
+        }
+    });
+
+    if (window.supabase) {
+        try {
+            const S_URL = 'https://hnldgzockufiknivvfaa.supabase.co';
+            const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhubGRnem9ja3VmaWtuaXZ2ZmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNzkzMjIsImV4cCI6MjA5MzY1NTMyMn0.s8X1YX9qfeJXLD6PUVJkKoobgnpf_5A098JZQE7Feqk';
+            const sup = window.supabase.createClient(S_URL, S_KEY);
+            
+            // Consultar citas para esa fecha
+            const { data: citas, error } = await sup
+                .from('citas')
+                .select('hora')
+                .eq('fecha', fechaSeleccionada);
+
+            if (error) throw error;
+
+            const horasOcupadas = citas ? citas.map(c => c.hora) : [];
+            
+            Array.from(horaSelect.options).forEach(opt => {
+                if (opt.value) {
+                    if (horasOcupadas.includes(opt.value)) {
+                        opt.disabled = true;
+                        opt.textContent = opt.value + " (Ocupado)";
+                    } else {
+                        opt.disabled = false;
+                        opt.textContent = opt.value;
+                    }
+                }
+            });
+
+        } catch (err) {
+            console.error("Error al comprobar disponibilidad:", err);
+            // Si hay error, habilitar todo para no bloquear al usuario
+            Array.from(horaSelect.options).forEach(opt => {
+                if (opt.value) {
+                    opt.disabled = false;
+                    opt.textContent = opt.value;
+                }
+            });
+        }
+    } else {
+        // Si no hay supabase, habilitar todo
+        Array.from(horaSelect.options).forEach(opt => {
+            if (opt.value) {
+                opt.disabled = false;
+                opt.textContent = opt.value;
+            }
+        });
+    }
+}
+
+// Configurar calendario (min fecha hoy)
+function setupCalendar() {
+    const fechaInput = document.getElementById('fecha');
+    if (fechaInput) {
+        const today = new Date().toISOString().split('T')[0];
+        fechaInput.setAttribute('min', today);
+        fechaInput.addEventListener('change', updateAvailableHours);
+    }
+}
+
+// ========================================
 // MODO NOCHE / DARK MODE (REVISADO)
 // ========================================
 
@@ -255,5 +423,9 @@ if (themeToggle) {
     });
 }
 
-// Iniciar carga de reseñas
-document.addEventListener('DOMContentLoaded', fetchReviews);
+// Iniciar carga de reseñas y pre-relleno
+document.addEventListener('DOMContentLoaded', () => {
+    fetchReviews();
+    prefillService();
+    setupCalendar();
+});
