@@ -263,11 +263,11 @@ function prefillService() {
 
     if (serviceId) {
         const mapping = {
-            'relax': 'Masaje Relajante - 60min - 35€',
-            'terapeutico': 'Masaje Terapéutico - 75min - 45€',
-            'deportivo': 'Masaje Deportivo - 60min - 40€',
+            'relax': 'Masaje Relajante - 45min - 25€',
+            'terapeutico': 'Masaje Terapéutico - 60min - 30€',
+            'deportivo': 'Masaje Deportivo - 60min - 30€',
             'express': 'Masaje Express - 30min - 25€',
-            'reiki': 'Sesión de Reiki - 60min - 30€',
+            'reiki': 'Sesión de Reiki - 50min - 30€',
             'pack': 'Quiromasaje + Reiki - 90min - 55€',
             'combinado': 'Quiromasaje + Reiki - 90min - 55€'
         };
