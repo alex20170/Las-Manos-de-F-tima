@@ -1697,28 +1697,28 @@ button {
 
 @media (min-width: 1025px) {
     html {
-        font-size: 20px; /* Aumenta el escalado general en un 25% */
+        font-size: 18.5px; /* Aumenta el escalado general en un 15.625% */
     }
     .container {
-        max-width: 1350px;
+        max-width: 1320px;
     }
 }
 
 @media (min-width: 1440px) {
     html {
-        font-size: 22px; /* Aumenta el escalado general en un 37.5% */
+        font-size: 20.5px; /* Aumenta el escalado general en un 28.125% */
     }
     .container {
-        max-width: 1500px;
+        max-width: 1460px;
     }
 }
 
 @media (min-width: 1920px) {
     html {
-        font-size: 24px; /* Aumenta el escalado general en un 50% */
+        font-size: 22.5px; /* Aumenta el escalado general en un 40.625% */
     }
     .container {
-        max-width: 1700px;
+        max-width: 1600px;
     }
 }
 
