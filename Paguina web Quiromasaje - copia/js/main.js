@@ -336,53 +336,54 @@ async function updateAvailableHours() {
         }
     });
 
+    let horasOcupadas = [];
+
+    // 1. Obtener citas locales (localStorage)
+    const citasLocal = JSON.parse(localStorage.getItem('citas_manos_fatima')) || [];
+    const ocupadasLocal = citasLocal
+        .filter(c => c.fecha === fechaSeleccionada && c.estado !== 'Completada' && c.estado !== 'Cancelada')
+        .map(c => c.hora);
+    
+    horasOcupadas = [...horasOcupadas, ...ocupadasLocal];
+
+    // 2. Obtener citas de Supabase (si está disponible)
     if (window.supabase) {
         try {
             const S_URL = 'https://hnldgzockufiknivvfaa.supabase.co';
             const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhubGRnem9ja3VmaWtuaXZ2ZmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNzkzMjIsImV4cCI6MjA5MzY1NTMyMn0.s8X1YX9qfeJXLD6PUVJkKoobgnpf_5A098JZQE7Feqk';
             const sup = window.supabase.createClient(S_URL, S_KEY);
             
-            // Consultar citas para esa fecha
-            const { data: citas, error } = await sup
+            const { data: citasCloud, error } = await sup
                 .from('citas')
-                .select('hora')
+                .select('hora, estado')
                 .eq('fecha', fechaSeleccionada);
 
-            if (error) throw error;
-
-            const horasOcupadas = citas ? citas.map(c => c.hora) : [];
-            
-            Array.from(horaSelect.options).forEach(opt => {
-                if (opt.value) {
-                    if (horasOcupadas.includes(opt.value)) {
-                        opt.disabled = true;
-                        opt.textContent = opt.value + " (Ocupado)";
-                    } else {
-                        opt.disabled = false;
-                        opt.textContent = opt.value;
-                    }
-                }
-            });
-
+            if (!error && citasCloud) {
+                const ocupadasCloud = citasCloud
+                    .filter(c => c.estado !== 'Completada' && c.estado !== 'Cancelada')
+                    .map(c => c.hora);
+                horasOcupadas = [...horasOcupadas, ...ocupadasCloud];
+            }
         } catch (err) {
-            console.error("Error al comprobar disponibilidad:", err);
-            // Si hay error, habilitar todo para no bloquear al usuario
-            Array.from(horaSelect.options).forEach(opt => {
-                if (opt.value) {
-                    opt.disabled = false;
-                    opt.textContent = opt.value;
-                }
-            });
+            console.error("Error al comprobar disponibilidad en la nube:", err);
         }
-    } else {
-        // Si no hay supabase, habilitar todo
-        Array.from(horaSelect.options).forEach(opt => {
-            if (opt.value) {
+    }
+
+    // Limpiar duplicados por si acaso
+    horasOcupadas = [...new Set(horasOcupadas)];
+
+    // 3. Bloquear las horas ocupadas en el desplegable
+    Array.from(horaSelect.options).forEach(opt => {
+        if (opt.value) {
+            if (horasOcupadas.includes(opt.value)) {
+                opt.disabled = true;
+                opt.textContent = opt.value + " (Ocupado)";
+            } else {
                 opt.disabled = false;
                 opt.textContent = opt.value;
             }
-        });
-    }
+        }
+    });
 }
 
 // Configurar calendario (min fecha hoy)
