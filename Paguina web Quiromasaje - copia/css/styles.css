@@ -175,7 +175,7 @@ button {
 
 .logo-svg {
     width: 5rem;
-    height: 5rem;
+    height: 6rem;
 }
 
 .logo-text h1 {
@@ -1697,28 +1697,28 @@ button {
 
 @media (min-width: 1025px) {
     html {
-        font-size: 17.5px; /* Aumenta el escalado general en un 9.375% */
+        font-size: 20px; /* Aumenta el escalado general en un 25% */
     }
     .container {
-        max-width: 1300px;
+        max-width: 1350px;
     }
 }
 
 @media (min-width: 1440px) {
     html {
-        font-size: 19px; /* Aumenta el escalado general en un 18.75% */
+        font-size: 22px; /* Aumenta el escalado general en un 37.5% */
     }
     .container {
-        max-width: 1450px;
+        max-width: 1500px;
     }
 }
 
 @media (min-width: 1920px) {
     html {
-        font-size: 21px; /* Aumenta el escalado general en un 31.25% */
+        font-size: 24px; /* Aumenta el escalado general en un 50% */
     }
     .container {
-        max-width: 1650px;
+        max-width: 1700px;
     }
 }
 
