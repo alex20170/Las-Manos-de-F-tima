@@ -81,10 +81,27 @@
                     </div>
 
                     <div class="form-row">
-                        <div class="form-group">
-                            <label for="fecha">Fecha preferida *</label>
-                            <input type="date" id="fecha" name="fecha" required>
+                        <div class="form-group custom-date-group">
+                            <label for="fechaDisplay">Fecha preferida *</label>
+                            <div class="custom-date-wrapper" id="customDateWrapper">
+                                <input type="text" id="fechaDisplay" class="custom-date-input" placeholder="Selecciona una fecha" readonly required>
+                                <span class="custom-date-icon">📅</span>
+                                <input type="hidden" id="fecha" name="fecha">
+                            </div>
+                            <!-- Calendario personalizado -->
+                            <div class="custom-calendar" id="customCalendar">
+                                <div class="cal-header">
+                                    <button type="button" class="cal-nav" id="calPrev">&#8249;</button>
+                                    <span class="cal-month-year" id="calMonthYear"></span>
+                                    <button type="button" class="cal-nav" id="calNext">&#8250;</button>
+                                </div>
+                                <div class="cal-weekdays">
+                                    <span>Lu</span><span>Ma</span><span>Mi</span><span>Ju</span><span>Vi</span><span>Sa</span><span>Do</span>
+                                </div>
+                                <div class="cal-days" id="calDays"></div>
+                            </div>
                         </div>
+
                         <div class="form-group">
                             <label for="hora">Hora *</label>
                             <select id="hora" name="hora" required>
@@ -98,6 +115,7 @@
                             </select>
                         </div>
                     </div>
+
 
                     <div class="form-group">
                         <label for="nombre">Nombre completo *</label>
@@ -140,6 +158,117 @@
     </footer>
 
     <script src="js/main.js"></script>
+    <script>
+        // ===== CALENDARIO PERSONALIZADO =====
+        (function() {
+            const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+            let currentYear, currentMonth, selectedDate = null;
+
+            const cal       = document.getElementById('customCalendar');
+            const wrapper   = document.getElementById('customDateWrapper');
+            const display   = document.getElementById('fechaDisplay');
+            const hidden    = document.getElementById('fecha');
+            const calDays   = document.getElementById('calDays');
+            const monthYear = document.getElementById('calMonthYear');
+
+            function init() {
+                const now = new Date();
+                currentYear  = now.getFullYear();
+                currentMonth = now.getMonth();
+                renderCal();
+            }
+
+            function renderCal() {
+                monthYear.textContent = MESES[currentMonth] + ' ' + currentYear;
+                calDays.innerHTML = '';
+
+                const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+                // Lunes=1, Dom=0 → ajustamos para que empiece en Lunes
+                const startOffset = (firstDay === 0) ? 6 : firstDay - 1;
+                const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+                const today = new Date(); today.setHours(0,0,0,0);
+
+                // Celdas vacías del inicio
+                for (let i = 0; i < startOffset; i++) {
+                    const blank = document.createElement('span');
+                    blank.className = 'cal-day empty';
+                    calDays.appendChild(blank);
+                }
+
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const dayDate = new Date(currentYear, currentMonth, d);
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.textContent = d;
+                    btn.className = 'cal-day';
+
+                    if (dayDate < today) {
+                        btn.classList.add('disabled');
+                        btn.disabled = true;
+                    } else {
+                        btn.addEventListener('click', function() {
+                            selectDay(d);
+                        });
+                    }
+
+                    // Hoy
+                    if (dayDate.toDateString() === today.toDateString()) {
+                        btn.classList.add('today');
+                    }
+
+                    // Seleccionado
+                    if (selectedDate &&
+                        d === selectedDate.getDate() &&
+                        currentMonth === selectedDate.getMonth() &&
+                        currentYear === selectedDate.getFullYear()) {
+                        btn.classList.add('selected');
+                    }
+
+                    calDays.appendChild(btn);
+                }
+            }
+
+            function selectDay(d) {
+                selectedDate = new Date(currentYear, currentMonth, d);
+                const dd = String(d).padStart(2,'0');
+                const mm = String(currentMonth + 1).padStart(2,'0');
+                display.value = dd + '/' + mm + '/' + currentYear;
+                hidden.value  = currentYear + '-' + mm + '-' + dd;
+                cal.classList.remove('open');
+                renderCal();
+            }
+
+            function pad(n) { return String(n).padStart(2,'0'); }
+
+            // Abrir/cerrar
+            wrapper.addEventListener('click', function(e) {
+                e.stopPropagation();
+                cal.classList.toggle('open');
+                if (cal.classList.contains('open')) renderCal();
+            });
+
+            // Cerrar al hacer click fuera
+            document.addEventListener('click', function() {
+                cal.classList.remove('open');
+            });
+            cal.addEventListener('click', function(e) { e.stopPropagation(); });
+
+            // Navegación mes anterior / siguiente
+            document.getElementById('calPrev').addEventListener('click', function() {
+                currentMonth--;
+                if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+                renderCal();
+            });
+            document.getElementById('calNext').addEventListener('click', function() {
+                currentMonth++;
+                if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+                renderCal();
+            });
+
+            init();
+        })();
+    </script>
 </body>
+
 
 </html>
