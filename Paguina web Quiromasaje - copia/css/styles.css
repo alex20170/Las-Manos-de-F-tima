@@ -174,8 +174,8 @@ button {
 }
 
 .logo-svg {
-    width: 80px;
-    height: 80px;
+    width: 5rem;
+    height: 5rem;
 }
 
 .logo-text h1 {
@@ -1689,6 +1689,37 @@ button {
 .service-card-premium:hover::before,
 .review-card-premium:hover::before {
     opacity: 1;
+}
+
+/* ========================================
+   ESCALADO PARA ORDENADORES Y PANTALLAS GRANDES
+=========================================== */
+
+@media (min-width: 1025px) {
+    html {
+        font-size: 17.5px; /* Aumenta el escalado general en un 9.375% */
+    }
+    .container {
+        max-width: 1300px;
+    }
+}
+
+@media (min-width: 1440px) {
+    html {
+        font-size: 19px; /* Aumenta el escalado general en un 18.75% */
+    }
+    .container {
+        max-width: 1450px;
+    }
+}
+
+@media (min-width: 1920px) {
+    html {
+        font-size: 21px; /* Aumenta el escalado general en un 31.25% */
+    }
+    .container {
+        max-width: 1650px;
+    }
 }
 
 
