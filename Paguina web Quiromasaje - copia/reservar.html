@@ -236,6 +236,9 @@
                 hidden.value  = currentYear + '-' + mm + '-' + dd;
                 cal.classList.remove('open');
                 renderCal();
+                
+                // Disparar el evento 'change' para que main.js actualice las horas libres
+                hidden.dispatchEvent(new Event('change'));
             }
 
             function pad(n) { return String(n).padStart(2,'0'); }
